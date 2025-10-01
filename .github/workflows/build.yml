@@ -14,6 +14,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+        - name: Activate Unity
+        uses: game-ci/unity-activate@v2
+        with:
+          email: ${{ secrets.UNITY_EMAIL }}
+          password: ${{ secrets.UNITY_PASSWORD }}
+
       - name: Cache Unity
         uses: actions/cache@v3
         with:
