@@ -19,10 +19,10 @@ public class CameraControl : MonoBehaviour
         xPos = player.position.x;
 
         float verExtent = Camera.main.orthographicSize;
-        float horExtent = verExtent * (Screen.width/Screen.height);
+        float horExtent = verExtent * Camera.main.aspect;
 
         yPos = Mathf.Clamp(yPos, bounds.bounds.min.y+verExtent, bounds.bounds.max.y - verExtent);
-        xPos = Mathf.Clamp(xPos, bounds.bounds.min.x+horExtent*2f, bounds.bounds.max.x - horExtent*2f);
+        xPos = Mathf.Clamp(xPos, bounds.bounds.min.x+horExtent, bounds.bounds.max.x - horExtent);
 
         transform.position = new Vector3(xPos, yPos, transform.position.z);
     
