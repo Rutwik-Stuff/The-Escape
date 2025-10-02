@@ -6,9 +6,13 @@ public class Movement : MonoBehaviour
     public Rigidbody2D rb;
     public float jumpVelocity = 10f;  
     public float walkVelocity = 5f;
+    public GameObject hitRight;
+    public GameObject hitLeft;
+    public GameObject hitDown;
     bool isOnGround = true;
     bool isJumping = false;
     long time;
+    bool rightDirection = true;
 
     void Update()
     {
@@ -32,11 +36,13 @@ public class Movement : MonoBehaviour
         
         if (Input.GetKey(KeyCode.D)) 
         {
+            rightDirection = true;
             var v = rb.linearVelocity;
             v.x = walkVelocity;   
             rb.linearVelocity = v;
         } else if (Input.GetKey(KeyCode.A)) 
         {
+            rightDirection = false;
             var v = rb.linearVelocity;
             v.x = -walkVelocity;   
             rb.linearVelocity = v;
@@ -49,9 +55,27 @@ public class Movement : MonoBehaviour
             }
             
         }
+        if(Input.GetMouseButtonDown(1)){
+            if(Input.GetKey(KeyCode.S)){
+                //hit down
+            }
+            if(rightDirection){
+                //hitright
+            } else {
+                //hitleft
+            }
+            
+        }
     }
     public void onGround(bool state){
         isOnGround = state;
     }
+    public void startDown(){
+        hitDown.SetActive(true);
+    }
+    public void endDown(){
+        hitDown.SetActive(false);
+    }
+
     
 }
