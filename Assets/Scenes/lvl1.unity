@@ -1050,6 +1050,9 @@ MonoBehaviour:
   rb: {fileID: 1772654054}
   jumpVelocity: 10
   walkVelocity: 5
+  left: {fileID: 0}
+  down: {fileID: 0}
+  right: {fileID: 0}
 --- !u!61 &1772654059
 BoxCollider2D:
   m_ObjectHideFlags: 0
