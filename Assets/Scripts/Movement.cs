@@ -15,6 +15,8 @@ public class Movement : MonoBehaviour
     private bool isHitting;
     private static bool isRight;
     public bool isOnWall = false;
+    private bool isExtraJump = false;
+    private bool canAirJump = false;
     public bool isRightWall;
     private bool disableRight;
     private bool disableLeft;
@@ -22,21 +24,30 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-        if(isOnGround || isJumping || isOnWall){
+        Debug.Log(isExtraJump);
+        if(isOnGround || isJumping || isOnWall || canAirJump){
             if (Input.GetKey(KeyCode.Space)){
                 if(!isJumping) time = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
                     isJumping = true;
+                    if(canAirJump) isExtraJump = false;
                     if(DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond-time<500){   
-                        if(isOnWall && !isOnGround || wallJump){
+                        if(isOnWall && !isOnGround || wallJump){ 
                             wallJump = true;
                             if(DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond-time<100){
                                  disableLeft = true;
+                                 disableRight = true;
                             } else {
                                 disableLeft = false;
+                                disableRight = false;
                             }
                             var v = rb.linearVelocity;
-                            v.y = jumpVelocity;   
-                            v.x = 12f;
+                            v.y = jumpVelocity;
+                            if(!isRightWall){
+                                v.x = 8f;
+                            } else {
+                                v.x = -8f;
+                            }
+                            
                             rb.linearVelocity = v;
                         } else {
                             var v = rb.linearVelocity;
@@ -48,6 +59,7 @@ public class Movement : MonoBehaviour
                     } else {
                         isJumping = false;
                         wallJump = false;
+                        canAirJump = false;
                     }
             
             } else {
@@ -55,6 +67,7 @@ public class Movement : MonoBehaviour
                 wallJump = false;
                 disableLeft = false;
                 disableRight = false;
+                canAirJump = false;
             }
         }
         
@@ -111,9 +124,17 @@ public class Movement : MonoBehaviour
         } else {
             rb.linearDamping = 1f;
         }
+        if(!isJumping && !isOnGround && !isOnWall && isExtraJump){
+            canAirJump = true;
+        }
+        
+        
     }
     public void onGround(bool state){
         isOnGround = state;
+        if(!state){
+            isExtraJump = true;
+        }
     }
     public void setHitting(bool state){
         isHitting = state;
@@ -121,5 +142,8 @@ public class Movement : MonoBehaviour
     public void setOnWall(bool state, bool wallKind){
         isOnWall = state;
         isRightWall = wallKind;
+        if(!state){
+            isExtraJump = true;
+        }
     }
 }
