@@ -16,12 +16,16 @@ jobs:
 
       - name: Cache Unity
         uses: actions/cache@v3
+
+      - name: Activate Unity
+        uses: game-ci/unity-activate@v2
         with:
-          path: ~/.cache/unity
-          key: ${{ runner.os }}-unity-${{ hashFiles('**/ProjectSettings/ProjectVersion.txt') }}
+          email: ${{ secrets.UNITY_EMAIL }}
+          password: ${{ secrets.UNITY_PASSWORD }}
 
       - name: Build project
         uses: game-ci/unity-builder@v2
         with:
-          unityVersion: 2022.3.0f1  # match your project
+          unityVersion: 2022.3.0f1
           targetPlatform: StandaloneWindows64
+
