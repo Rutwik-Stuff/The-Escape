@@ -1,0 +1,149 @@
+using UnityEngine;
+using System;
+
+public class Movement : MonoBehaviour
+{
+    public Rigidbody2D rb;
+    public float jumpVelocity = 10f;  
+    public float walkVelocity = 5f;
+    bool isOnGround = true;
+    bool isJumping = false;
+    long time;
+    public GameObject left;
+    public GameObject down;
+    public GameObject right;
+    private bool isHitting;
+    private static bool isRight;
+    public bool isOnWall = false;
+    private bool isExtraJump = false;
+    private bool canAirJump = false;
+    public bool isRightWall;
+    private bool disableRight;
+    private bool disableLeft;
+    private bool wallJump;
+
+    void Update()
+    {
+        Debug.Log(isExtraJump);
+        if(isOnGround || isJumping || isOnWall || canAirJump){
+            if (Input.GetKey(KeyCode.Space)){
+                if(!isJumping) time = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
+                    isJumping = true;
+                    if(canAirJump) isExtraJump = false;
+                    if(DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond-time<500){   
+                        if(isOnWall && !isOnGround || wallJump){ 
+                            wallJump = true;
+                            if(DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond-time<100){
+                                 disableLeft = true;
+                                 disableRight = true;
+                            } else {
+                                disableLeft = false;
+                                disableRight = false;
+                            }
+                            var v = rb.linearVelocity;
+                            v.y = jumpVelocity;
+                            if(!isRightWall){
+                                v.x = 8f;
+                            } else {
+                                v.x = -8f;
+                            }
+                            
+                            rb.linearVelocity = v;
+                        } else {
+                            var v = rb.linearVelocity;
+                            v.y = jumpVelocity;   
+                            rb.linearVelocity = v;
+                            disableLeft = false;
+                            disableRight = false;
+                        }
+                    } else {
+                        isJumping = false;
+                        wallJump = false;
+                        canAirJump = false;
+                    }
+            
+            } else {
+                isJumping = false;
+                wallJump = false;
+                disableLeft = false;
+                disableRight = false;
+                canAirJump = false;
+            }
+        }
+        
+        if (Input.GetKey(KeyCode.D) && !disableRight){
+        
+            isRight = true;
+            var v = rb.linearVelocity;
+            v.x = walkVelocity;   
+            rb.linearVelocity = v;
+            if(Input.GetMouseButtonDown(0)){
+                if(!isHitting){
+                    isHitting = true;
+                    right.SetActive(true);
+                }
+            }
+        } else if (Input.GetKey(KeyCode.A) && !disableLeft){
+        
+            isRight = false;
+            var v = rb.linearVelocity;
+            v.x = -walkVelocity;   
+            rb.linearVelocity = v;
+            if(Input.GetMouseButtonDown(0)){
+                if(!isHitting){
+                    left.SetActive(true);
+                    isHitting = true;
+                }
+            }
+        } else if(Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.S)){
+            if(!isHitting){
+                isHitting = true;
+                if(isRight) right.SetActive(true);
+                else 
+                left.SetActive(true);
+            }
+                
+        } else if(isOnGround){
+                var v= rb.linearVelocity;
+                v.x = 0;
+                rb.linearVelocity = v;
+            
+        } 
+        if(Input.GetKey(KeyCode.S)){
+            if(!isOnGround){
+                if(Input.GetMouseButtonDown(0)){
+                    if(!isHitting){
+                        isHitting = true;
+                        down.SetActive(true);
+                    }
+                }
+            }
+        }
+        if(!isOnGround && isOnWall){
+            rb.linearDamping = 9f;
+        } else {
+            rb.linearDamping = 1f;
+        }
+        if(!isJumping && !isOnGround && !isOnWall && isExtraJump){
+            canAirJump = true;
+        }
+        
+        
+    }
+    public void onGround(bool state){
+        isOnGround = state;
+        if(!state){
+            isExtraJump = true;
+        }
+    }
+    public void setHitting(bool state){
+        isHitting = state;
+    }
+    public void setOnWall(bool state, bool wallKind){
+        isOnWall = state;
+        isRightWall = wallKind;
+        if(!state){
+            isExtraJump = true;
+        }
+    }
+}
