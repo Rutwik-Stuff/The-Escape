@@ -21,10 +21,10 @@ public class Movement : MonoBehaviour
     private bool disableRight;
     private bool disableLeft;
     private bool wallJump;
+    private long dashTime;
 
     void Update()
     {
-        Debug.Log(isExtraJump);
         if(isOnGround || isJumping || isOnWall || canAirJump){
             if (Input.GetKey(KeyCode.Space)){
                 if(!isJumping) time = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
@@ -126,6 +126,15 @@ public class Movement : MonoBehaviour
         }
         if(!isJumping && !isOnGround && !isOnWall && isExtraJump){
             canAirJump = true;
+        }
+        if(Input.GetMouseButtonDown(1)){
+            if(isRight){
+                Debug.Log("Dashing");
+                rb.AddForce(new Vector2(1,0)*10f, ForceMode2D.Impulse);
+            } else {
+                rb.AddForce(new Vector2(-1,0)*10f, ForceMode2D.Impulse);
+            }
+
         }
         
         
