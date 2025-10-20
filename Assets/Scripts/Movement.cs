@@ -142,7 +142,7 @@ public class Movement : MonoBehaviour
     public void onGround(bool state){
         isOnGround = state;
         if(!state){
-            isExtraJump = true;
+            //isExtraJump = true;
         }
     }
     public void setHitting(bool state){
@@ -152,7 +152,7 @@ public class Movement : MonoBehaviour
         isOnWall = state;
         isRightWall = wallKind;
         if(!state){
-            isExtraJump = true;
+            //isExtraJump = true;
         }
     }
 }
