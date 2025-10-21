@@ -20,6 +20,7 @@ public class Movement : MonoBehaviour
     public bool isRightWall;
     private bool disableRight;
     private bool disableLeft;
+    private int dashesLeft = 0;
     private bool wallJump;
     private long dashTime;
 
@@ -75,8 +76,10 @@ public class Movement : MonoBehaviour
         
             isRight = true;
             var v = rb.linearVelocity;
-            v.x = walkVelocity;   
-            rb.linearVelocity = v;
+            if(v.x <= walkVelocity){
+                v.x = walkVelocity;   
+                rb.linearVelocity = v;
+            }
             if(Input.GetMouseButtonDown(0)){
                 if(!isHitting){
                     isHitting = true;
@@ -87,8 +90,10 @@ public class Movement : MonoBehaviour
         
             isRight = false;
             var v = rb.linearVelocity;
-            v.x = -walkVelocity;   
-            rb.linearVelocity = v;
+            if(v.x >= -walkVelocity){
+                v.x = -walkVelocity;   
+                rb.linearVelocity = v;
+            }
             if(Input.GetMouseButtonDown(0)){
                 if(!isHitting){
                     left.SetActive(true);
@@ -128,13 +133,16 @@ public class Movement : MonoBehaviour
             canAirJump = true;
         }
         if(Input.GetMouseButtonDown(1)){
+            if(dashesLeft>0 && !isOnGround){
+                dashesLeft--;
             if(isRight){
                 Debug.Log("Dashing");
-                rb.AddForce(new Vector2(1,0)*10f, ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(1,0)*15f, ForceMode2D.Impulse);
             } else {
-                rb.AddForce(new Vector2(-1,0)*10f, ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(-1,0)*15f, ForceMode2D.Impulse);
             }
 
+        }
         }
         
         
@@ -143,6 +151,8 @@ public class Movement : MonoBehaviour
         isOnGround = state;
         if(!state){
             //isExtraJump = true;
+        } else {
+            dashesLeft = 1;
         }
     }
     public void setHitting(bool state){
@@ -153,6 +163,8 @@ public class Movement : MonoBehaviour
         isRightWall = wallKind;
         if(!state){
             //isExtraJump = true;
+        } else {
+            dashesLeft = 1;
         }
     }
 }
