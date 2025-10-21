@@ -17,6 +17,7 @@ public class Movement : MonoBehaviour
     public bool isOnWall = false;
     private bool isExtraJump = false;
     private bool canAirJump = false;
+    private int dashesLeft = 0;
     public bool isRightWall;
     private bool disableRight;
     private bool disableLeft;
@@ -41,14 +42,13 @@ public class Movement : MonoBehaviour
                                 disableRight = false;
                             }
                             var v = rb.linearVelocity;
-                            v.y = jumpVelocity;
                             if(!isRightWall){
                                 v.x = 8f;
                             } else {
                                 v.x = -8f;
                             }
                             
-                            rb.linearVelocity = v;
+                            rb.linearVelocity = new Vector2(v.x, 10f);
                         } else {
                             var v = rb.linearVelocity;
                             v.y = jumpVelocity;   
@@ -75,8 +75,11 @@ public class Movement : MonoBehaviour
         
             isRight = true;
             var v = rb.linearVelocity;
-            v.x = walkVelocity;   
-            rb.linearVelocity = v;
+            if(v.x <= walkVelocity){
+                v.x = walkVelocity;   
+                rb.linearVelocity = v;
+            }
+            
             if(Input.GetMouseButtonDown(0)){
                 if(!isHitting){
                     isHitting = true;
@@ -87,8 +90,11 @@ public class Movement : MonoBehaviour
         
             isRight = false;
             var v = rb.linearVelocity;
-            v.x = -walkVelocity;   
-            rb.linearVelocity = v;
+            if(v.x >= -walkVelocity){
+                v.x = -walkVelocity;   
+                rb.linearVelocity = v;
+            }
+            
             if(Input.GetMouseButtonDown(0)){
                 if(!isHitting){
                     left.SetActive(true);
@@ -128,12 +134,16 @@ public class Movement : MonoBehaviour
             canAirJump = true;
         }
         if(Input.GetMouseButtonDown(1)){
-            if(isRight){
+            if(dashesLeft>0 && !isOnGround){
+                dashesLeft--;
+               if(isRight){
                 Debug.Log("Dashing");
-                rb.AddForce(new Vector2(1,0)*10f, ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(1,0)*15f, ForceMode2D.Impulse);
             } else {
-                rb.AddForce(new Vector2(-1,0)*10f, ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(-1,0)*15f, ForceMode2D.Impulse);
+            } 
             }
+            
 
         }
         
@@ -142,7 +152,9 @@ public class Movement : MonoBehaviour
     public void onGround(bool state){
         isOnGround = state;
         if(!state){
-            //isExtraJump = true;
+            isExtraJump = true;
+        } else {
+            dashesLeft = 1;
         }
     }
     public void setHitting(bool state){
@@ -152,7 +164,9 @@ public class Movement : MonoBehaviour
         isOnWall = state;
         isRightWall = wallKind;
         if(!state){
-            //isExtraJump = true;
+            isExtraJump = true;
+        } else {
+            dashesLeft = 1;
         }
     }
 }
