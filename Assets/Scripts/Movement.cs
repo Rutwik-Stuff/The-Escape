@@ -23,6 +23,12 @@ public class Movement : MonoBehaviour
     private int dashesLeft = 0;
     private bool wallJump;
     private long dashTime;
+    public static float startPosX;
+    public static float startPosY;
+
+    void Start(){
+        transform.position = new Vector2(startPosX, startPosY);
+    }
 
     void Update()
     {
