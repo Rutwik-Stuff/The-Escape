@@ -556,6 +556,7 @@ GameObject:
   - component: {fileID: 1940143254361789205}
   - component: {fileID: 4790122541234189742}
   - component: {fileID: 611066649996396928}
+  - component: {fileID: 3607337837716485695}
   m_Layer: 0
   m_Name: Dynamic Sprite
   m_TagString: Player
@@ -735,6 +736,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.9880805, y: 0.97736794}
   m_EdgeRadius: 0
+--- !u!114 &3607337837716485695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5221660296082613241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6053715cc69ca874f9f139e24883b016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &5543984699420200632
 GameObject:
   m_ObjectHideFlags: 0
