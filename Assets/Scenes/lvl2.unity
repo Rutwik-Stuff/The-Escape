@@ -1560,7 +1560,7 @@ GameObject:
   - component: {fileID: 864116662}
   m_Layer: 0
   m_Name: Static Sprite
-  m_TagString: Untagged
+  m_TagString: death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3582,7 +3582,7 @@ GameObject:
   - component: {fileID: 1670655648}
   m_Layer: 0
   m_Name: Square (20)
-  m_TagString: jumpable
+  m_TagString: wjump
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3856,7 +3856,7 @@ GameObject:
   - component: {fileID: 1876239007}
   m_Layer: 0
   m_Name: Square (11)
-  m_TagString: jumpable
+  m_TagString: wjump
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3994,7 +3994,7 @@ GameObject:
   - component: {fileID: 1922531192}
   m_Layer: 0
   m_Name: Static Sprite (1)
-  m_TagString: Untagged
+  m_TagString: death
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
