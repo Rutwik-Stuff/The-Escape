@@ -25,8 +25,11 @@ public class Movement : MonoBehaviour
     private long dashTime;
     public static float startPosX;
     public static float startPosY;
+    public float startX = null;
+    public float startY = null;
 
     void Start(){
+        if(startPosX)
         transform.position = new Vector2(startPosX, startPosY);
     }
 
