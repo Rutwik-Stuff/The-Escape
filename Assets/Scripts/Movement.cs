@@ -25,11 +25,15 @@ public class Movement : MonoBehaviour
     private long dashTime;
     public static float startPosX;
     public static float startPosY;
-    public float startX = null;
-    public float startY = null;
+    public float startX = 0;
+    public float startY = 0;
+    public float hitImpulse = 5f;
 
     void Start(){
-        if(startPosX)
+        if(startX != 0 && startY != 0){
+            startPosX = startX;
+            startPosY = startY;
+        }
         transform.position = new Vector2(startPosX, startPosY);
     }
 
@@ -89,7 +93,16 @@ public class Movement : MonoBehaviour
                 v.x = walkVelocity;   
                 rb.linearVelocity = v;
             }
-            if(Input.GetMouseButtonDown(0)){
+            if(Input.GetKey(KeyCode.S)){
+                if(!isOnGround){
+                 if(Input.GetMouseButtonDown(0)){
+                     if(!isHitting){
+                        isHitting = true;
+                        down.SetActive(true);
+                    }
+                }
+            }
+        } else if(Input.GetMouseButtonDown(0)){
                 if(!isHitting){
                     isHitting = true;
                     right.SetActive(true);
@@ -103,7 +116,16 @@ public class Movement : MonoBehaviour
                 v.x = -walkVelocity;   
                 rb.linearVelocity = v;
             }
-            if(Input.GetMouseButtonDown(0)){
+            if(Input.GetKey(KeyCode.S)){
+            if(!isOnGround){
+                if(Input.GetMouseButtonDown(0)){
+                    if(!isHitting){
+                        isHitting = true;
+                        down.SetActive(true);
+                    }
+                }
+            }
+        } else if(Input.GetMouseButtonDown(0)){
                 if(!isHitting){
                     left.SetActive(true);
                     isHitting = true;
@@ -175,5 +197,14 @@ public class Movement : MonoBehaviour
         } else {
             dashesLeft = 1;
         }
+    }
+    public void HitUpImpulse(){
+        rb.AddForce(new Vector2(0,1)*hitImpulse, ForceMode2D.Impulse);
+    }
+    public void HitLeftImpulse(){
+        rb.AddForce(new Vector2(-1,0)*hitImpulse, ForceMode2D.Impulse);
+    }
+    public void HitRightImpulse(){
+        rb.AddForce(new Vector2(1,0)*hitImpulse, ForceMode2D.Impulse);
     }
 }
