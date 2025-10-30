@@ -31,10 +31,12 @@ public class Movement : MonoBehaviour
 
     void Start(){
         if(startX != 0 && startY != 0){
-            startPosX = startX;
-            startPosY = startY;
+            Debug.Log(startX + " " + startY);
+            transform.position = new Vector2(startX, startY);
+        } else {
+            transform.position = new Vector2(startPosX, startPosY);
         }
-        transform.position = new Vector2(startPosX, startPosY);
+           
     }
 
     void Update()
