@@ -6,7 +6,7 @@ public class WallBreak : MonoBehaviour
     public int hitsToBreak = 3;
     private int hitsRemaining = 3;
 
-    void Start(){
+    void Awake(){
         if(gameObject.activeSelf){
             hitsRemaining = hitsToBreak;
         }
