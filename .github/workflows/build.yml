@@ -1,9 +1,9 @@
-name: The Escape Public Build
+name: The Escape Beta Build
 
 on:
   push:
     branches:
-      - public-release  # so it relesases on a public release
+      - beta-release  # so it relesases on a public release
 
 jobs:
   build:
