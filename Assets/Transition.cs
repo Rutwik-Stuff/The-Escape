@@ -11,8 +11,6 @@ public class Transition : MonoBehaviour
             SceneManager.LoadScene(sceneName);
             Movement.startPosX = posx;
             Movement.startPosY = posy;
-
-
         }
     }
 }
