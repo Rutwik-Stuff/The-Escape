@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class Movement : MonoBehaviour
+public class Movement : MonoBehaviour, Savable
 {
     public Rigidbody2D rb;
     public float jumpVelocity = 10f;  
@@ -29,6 +29,13 @@ public class Movement : MonoBehaviour
     public float startY = 0;
     public float hitImpulse = 5f;
 
+    private bool HitUnlocked;
+    private bool AirJumpUnlocked;
+    private bool DashUnlocked;
+    private bool WallJumpUnlocked;
+
+    public Saves sv;
+
     void Start(){
         if(startX != 0 && startY != 0){
             Debug.Log(startX + " " + startY);
@@ -36,7 +43,7 @@ public class Movement : MonoBehaviour
         } else {
             transform.position = new Vector2(startPosX, startPosY);
         }
-           
+        //sv = FindObjectOfType<Saves>();
     }
 
     void Update()
@@ -209,4 +216,16 @@ public class Movement : MonoBehaviour
     public void HitRightImpulse(){
         rb.AddForce(new Vector2(1,0)*hitImpulse, ForceMode2D.Impulse);
     }
+    public void receiveChanges(){
+        HitUnlocked = sv.HitUnlocked == 1;
+        AirJumpUnlocked = sv.AirJumpUnlocked == 1;
+        WallJumpUnlocked = sv.WallJumpUnlocked == 1;
+        DashUnlocked = sv.DashUnlocked == 1;
+
+        Debug.Log(HitUnlocked);
+        Debug.Log(AirJumpUnlocked);
+        Debug.Log(WallJumpUnlocked);
+        Debug.Log(DashUnlocked);
+    }
+
 }
