@@ -11,6 +11,8 @@ public class Saves : MonoBehaviour
     public int LastBenchID;
     public string curentSaveID = "0";
 
+
+    private Dictionary<string, int[]> wallBreaks = new Dictionary<string, int[]>();
     private List<Savable> savables = new List<Savable>();
 
     // Singleton pattern so you can access it anywhere
@@ -30,11 +32,6 @@ public class Saves : MonoBehaviour
             return;
         }
         loadSaves();
-        LoadSavablesList();
-        foreach(var obj in savables){
-            obj.receiveChanges();
-        }
-
         // Initialize default values if needed
     }
     public void makeLatestSave(){
@@ -44,6 +41,11 @@ public class Saves : MonoBehaviour
         makeIntSave("DashUnlocked", DashUnlocked);
         makeIntSave("LastBenchID", LastBenchID);
 
+        foreach (KeyValuePair<string, int[]> entry in wallBreaks)
+        {
+            makeIntSave("wallBreak"+entry.Value[0], entry.Value[1]);
+        }
+
         Debug.Log("Saves:");
         Debug.Log(getIntSave("HitUnlocked"));
         Debug.Log(getIntSave("WallJumpUnlocked"));
@@ -51,8 +53,11 @@ public class Saves : MonoBehaviour
         Debug.Log(getIntSave("DashUnlocked"));
         Debug.Log(getIntSave("LastBenchID"));
     }
-    private void sendReceive(){
-
+    public void LoadSceneSaves(){
+        LoadSavablesList();
+        foreach(var obj in savables){
+            obj.receiveChanges();
+        }
     }
     private void LoadSavablesList(){
         savables = FindObjectsOfType<MonoBehaviour>().OfType<Savable>().ToList();
@@ -64,7 +69,21 @@ public class Saves : MonoBehaviour
         WallJumpUnlocked = 1;
         DashUnlocked = 0;
     }
-
+    public void addNewWall(int id){
+        if(wallBreaks.ContainsKey("wallbreak"+id)){
+            //idk what to do if it is added already
+        } else {
+            wallBreaks["wallbreak"+id] = new int[2]{id, 0};
+        }
+        
+    }
+    public int getWallState(int id){
+        return wallBreaks["wallbreak"+id][1];
+    }
+    public void setWallState(int id, int value){
+        wallBreaks["wallbreak"+id][1] = value;
+        Debug.Log("wallstate : " + wallBreaks["wallbreak"+id][1]);
+    }
 
 
     
@@ -81,7 +100,7 @@ public class Saves : MonoBehaviour
         PlayerPrefs.SetFloat(curentSaveID + name, value);
     }
     public int getIntSave(string name){
-        return PlayerPrefs.GetInt(curentSaveID + name, 0);
+        return PlayerPrefs.GetInt(curentSaveID + name, -1);
     }
     public string getStringSave(string name){
         return PlayerPrefs.GetString(curentSaveID + name, "UNKNOWN");

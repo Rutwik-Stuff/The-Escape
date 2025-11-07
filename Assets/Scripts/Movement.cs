@@ -217,6 +217,7 @@ public class Movement : MonoBehaviour, Savable
         rb.AddForce(new Vector2(1,0)*hitImpulse, ForceMode2D.Impulse);
     }
     public void receiveChanges(){
+        sv = FindObjectOfType<Saves>();
         HitUnlocked = sv.HitUnlocked == 1;
         AirJumpUnlocked = sv.AirJumpUnlocked == 1;
         WallJumpUnlocked = sv.WallJumpUnlocked == 1;

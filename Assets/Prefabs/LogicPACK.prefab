@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 8143741879433666344}
   m_Layer: 0
   m_Name: hitleft
-  m_TagString: Untagged
+  m_TagString: Hit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -492,70 +492,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   mv: {fileID: 4790122541234189742}
---- !u!1 &1239146873132455827
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6557549906871449426}
-  - component: {fileID: 560795097299685961}
-  - component: {fileID: 6955384896982203708}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6557549906871449426
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1239146873132455827}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6060139883771123773}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &560795097299685961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1239146873132455827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46a67f9aa79aad14e8ab706c66a452e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  HitUnlocked: 0
-  WallJumpUnlocked: 0
-  AirJumpUnlocked: 0
-  DashUnlocked: 0
-  LastBenchID: 0
-  curentSaveID: 0
---- !u!114 &6955384896982203708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1239146873132455827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b2d94c185eb8714d81f2239486e03d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  skillPanel: {fileID: 4076099188790078262}
 --- !u!1 &1412562479130830552
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,7 +626,6 @@ Transform:
   - {fileID: 3911796588946768769}
   - {fileID: 2489641424290509333}
   - {fileID: 4619388984205765881}
-  - {fileID: 6557549906871449426}
   - {fileID: 7347062046939753379}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -997,7 +932,7 @@ MonoBehaviour:
   startX: 0
   startY: 0
   hitImpulse: 20
-  sv: {fileID: 560795097299685961}
+  sv: {fileID: 0}
 --- !u!61 &611066649996396928
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1072,7 +1007,7 @@ GameObject:
   - component: {fileID: 6230149616728833796}
   m_Layer: 0
   m_Name: hitdown
-  m_TagString: Untagged
+  m_TagString: Hit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1563,7 +1498,7 @@ GameObject:
   - component: {fileID: 8336069049604771090}
   m_Layer: 0
   m_Name: hitright
-  m_TagString: Untagged
+  m_TagString: Hit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
