@@ -41,6 +41,9 @@ public class MainLogic : MonoBehaviour
         } else {
             skillPanel.SetActive(false);
         }*/
+        if(Input.GetKey(KeyCode.X)){
+            sv.delete();
+        }
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
