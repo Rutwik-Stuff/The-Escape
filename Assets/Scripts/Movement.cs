@@ -54,7 +54,7 @@ public class Movement : MonoBehaviour, Savable
                     isJumping = true;
                     if(canAirJump) isExtraJump = false;
                     if(DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond-time<500){   
-                        if(isOnWall && !isOnGround || wallJump){ 
+                        if((isOnWall && !isOnGround || wallJump) && WallJumpUnlocked){ 
                             wallJump = true;
                             if(DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond-time<100){
                                  disableLeft = true;
@@ -104,14 +104,14 @@ public class Movement : MonoBehaviour, Savable
             }
             if(Input.GetKey(KeyCode.S)){
                 if(!isOnGround){
-                 if(Input.GetMouseButtonDown(0)){
+                 if(Input.GetMouseButtonDown(0) && HitUnlocked){
                      if(!isHitting){
                         isHitting = true;
                         down.SetActive(true);
                     }
                 }
             }
-        } else if(Input.GetMouseButtonDown(0)){
+        } else if(Input.GetMouseButtonDown(0) && HitUnlocked){
                 if(!isHitting){
                     isHitting = true;
                     right.SetActive(true);
@@ -127,20 +127,20 @@ public class Movement : MonoBehaviour, Savable
             }
             if(Input.GetKey(KeyCode.S)){
             if(!isOnGround){
-                if(Input.GetMouseButtonDown(0)){
+                if(Input.GetMouseButtonDown(0) && HitUnlocked){
                     if(!isHitting){
                         isHitting = true;
                         down.SetActive(true);
                     }
                 }
             }
-        } else if(Input.GetMouseButtonDown(0)){
+        } else if(Input.GetMouseButtonDown(0) && HitUnlocked){
                 if(!isHitting){
                     left.SetActive(true);
                     isHitting = true;
                 }
             }
-        } else if(Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.S)){
+        } else if(Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.S) && HitUnlocked){
             if(!isHitting){
                 isHitting = true;
                 if(isRight) right.SetActive(true);
@@ -156,7 +156,7 @@ public class Movement : MonoBehaviour, Savable
         } 
         if(Input.GetKey(KeyCode.S)){
             if(!isOnGround){
-                if(Input.GetMouseButtonDown(0)){
+                if(Input.GetMouseButtonDown(0) && HitUnlocked){
                     if(!isHitting){
                         isHitting = true;
                         down.SetActive(true);
@@ -169,11 +169,11 @@ public class Movement : MonoBehaviour, Savable
         } else {
             rb.linearDamping = 1f;
         }
-        if(!isJumping && !isOnGround && !isOnWall && isExtraJump){
+        if(!isJumping && !isOnGround && !isOnWall && isExtraJump && AirJumpUnlocked){
             canAirJump = true;
         }
         if(Input.GetMouseButtonDown(1)){
-            if(dashesLeft>0 && !isOnGround){
+            if(dashesLeft>0 && !isOnGround && DashUnlocked){
                 dashesLeft--;
             if(isRight){
                 //Debug.Log("Dashing");
@@ -190,7 +190,7 @@ public class Movement : MonoBehaviour, Savable
     public void onGround(bool state){
         isOnGround = state;
         if(!state){
-            //isExtraJump = true;
+            isExtraJump = true;
         } else {
             dashesLeft = 1;
         }
@@ -199,10 +199,15 @@ public class Movement : MonoBehaviour, Savable
         isHitting = state;
     }
     public void setOnWall(bool state, bool wallKind){
-        isOnWall = state;
-        isRightWall = wallKind;
+        if(WallJumpUnlocked){
+            isOnWall = state;
+            isRightWall = wallKind;
+        } else {
+            isOnWall = false;
+        }
+        
         if(!state){
-            //isExtraJump = true;
+            isExtraJump = true;
         } else {
             dashesLeft = 1;
         }
@@ -222,12 +227,12 @@ public class Movement : MonoBehaviour, Savable
         AirJumpUnlocked = sv.AirJumpUnlocked == 1;
         WallJumpUnlocked = sv.WallJumpUnlocked == 1;
         DashUnlocked = sv.DashUnlocked == 1;
-        /*
+        
         Debug.Log(HitUnlocked);
         Debug.Log(AirJumpUnlocked);
         Debug.Log(WallJumpUnlocked);
         Debug.Log(DashUnlocked);
-        */
+        
     }
 
 }
