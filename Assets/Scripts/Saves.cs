@@ -178,4 +178,10 @@ public class Saves : MonoBehaviour
         PlayerPrefs.Save(); // Make sure to actually apply the deletion
 
     }
+    public void reload(){
+        foreach (var obj in savables)
+        {
+            obj.receiveChanges();
+        }
+    }
 }
