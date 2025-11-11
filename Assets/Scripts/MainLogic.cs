@@ -10,7 +10,8 @@ public class MainLogic : MonoBehaviour
     private static MainLogic instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
-    {
+    {   
+        sv = FindObjectOfType<Saves>();
         if (instance == null)
         {
             instance = this;

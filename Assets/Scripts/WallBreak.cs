@@ -9,22 +9,9 @@ public class WallBreak : MonoBehaviour, Savable
     public Saves sv;
 
     void Awake() {
+    Debug.Log("Wall Awake");
     sv = FindObjectOfType<Saves>();
-    sv.addNewWall(ID); // ensures dictionary has the entry
-
-    int savedState = sv.getWallState(ID);
-
-    if(savedState == 1){
-        hitsRemaining = 0;
-        self.SetActive(false);
-    } else {
-        hitsRemaining = hitsToBreak; // or calculate partial hits if needed
-        self.SetActive(true);
     }
-
-    // This line ensures the dictionary is fully synced
-    sv.setWallState(ID, savedState);
-}
 
 
 
@@ -43,6 +30,7 @@ public class WallBreak : MonoBehaviour, Savable
     public void receiveChanges(){
         int state = sv.getWallState(ID);
         self.SetActive(state != 1);
+        
     }
 
 

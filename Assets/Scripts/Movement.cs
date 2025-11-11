@@ -176,7 +176,7 @@ public class Movement : MonoBehaviour, Savable
             if(dashesLeft>0 && !isOnGround){
                 dashesLeft--;
             if(isRight){
-                Debug.Log("Dashing");
+                //Debug.Log("Dashing");
                 rb.AddForce(new Vector2(1,0)*15f, ForceMode2D.Impulse);
             } else {
                 rb.AddForce(new Vector2(-1,0)*15f, ForceMode2D.Impulse);
@@ -222,11 +222,12 @@ public class Movement : MonoBehaviour, Savable
         AirJumpUnlocked = sv.AirJumpUnlocked == 1;
         WallJumpUnlocked = sv.WallJumpUnlocked == 1;
         DashUnlocked = sv.DashUnlocked == 1;
-
+        /*
         Debug.Log(HitUnlocked);
         Debug.Log(AirJumpUnlocked);
         Debug.Log(WallJumpUnlocked);
         Debug.Log(DashUnlocked);
+        */
     }
 
 }

@@ -34,6 +34,7 @@ public class Saves : MonoBehaviour
         InitializeWallBreaks();
 
         // Load all saves
+        Debug.Log("First Wall State Load");
         loadSaves();
     }
 
@@ -41,7 +42,7 @@ public class Saves : MonoBehaviour
     private void InitializeWallBreaks()
     {
         // Replace this with actual wall IDs from your game
-        for (int id = 1; id <= 100; id++) // assuming 100 walls max
+        for (int id = 0; id <= 10; id++) // assuming 100 walls max
         {
             addNewWall(id);
         }
@@ -49,6 +50,7 @@ public class Saves : MonoBehaviour
 
     public void makeLatestSave()
     {
+        Debug.Log("WallBreaks Size: " + wallBreaks.Count);
         makeIntSave("HitUnlocked", HitUnlocked);
         makeIntSave("WallJumpUnlocked", WallJumpUnlocked);
         makeIntSave("AirJumpUnlocked", AirJumpUnlocked);
@@ -73,7 +75,10 @@ public class Saves : MonoBehaviour
 
     public void LoadSceneSaves()
     {
+        Debug.Log("WallBreaks Size: " + wallBreaks.Count);
         LoadSavablesList();
+        Debug.Log("Load at new Scene");
+        loadSaves();
         foreach (var obj in savables)
         {
             obj.receiveChanges();
@@ -97,7 +102,12 @@ public class Saves : MonoBehaviour
         List<string> keys = new List<string>(wallBreaks.Keys);
         foreach (var key in keys)
         {
-            wallBreaks[key][1] = getIntSave(key);
+            if(!(getIntSave(key)==-1)){
+                wallBreaks[key][1] = getIntSave(key);
+                Debug.Log("WallBreaks load: " + key + " : " + wallBreaks[key][1]);
+            }
+            Debug.Log("WallBreaks state: " + key + " : " + wallBreaks[key][1]);
+            
         }
     }
 
@@ -106,7 +116,8 @@ public class Saves : MonoBehaviour
         string key = "wallbreak" + id;
         if (!wallBreaks.ContainsKey(key))
         {
-            wallBreaks[key] = new int[2] { id, getIntSave(key) }; // load existing value if any
+            wallBreaks[key] = new int[2] { id, getIntSave(key) };
+            Debug.Log("WallBreaks add: " + key + " : " + wallBreaks[key][1]); 
         }
     }
 
@@ -124,7 +135,7 @@ public class Saves : MonoBehaviour
         if (!wallBreaks.ContainsKey(key))
             addNewWall(id);
         wallBreaks[key][1] = value;
-        Debug.Log("wallstate : " + wallBreaks[key][1]);
+        Debug.Log("WallBreaks set: " + key + " : " + wallBreaks[key][1]);
     }
 
     public void PushSaves()
@@ -149,7 +160,7 @@ public class Saves : MonoBehaviour
 
     public int getIntSave(string name)
     {
-        return PlayerPrefs.GetInt(curentSaveID + name, 0); // default to 0 instead of -1
+        return PlayerPrefs.GetInt(curentSaveID + name, -1); // default to 0 instead of -1
     }
 
     public string getStringSave(string name)
