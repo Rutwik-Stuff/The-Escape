@@ -8,7 +8,7 @@ public class Saves : MonoBehaviour
     public int WallJumpUnlocked;
     public int AirJumpUnlocked;
     public int DashUnlocked;
-    public int LastBenchID;
+    public int LastBenchID = 0; //default
     public string curentSaveID = "0";
 
     private Dictionary<string, int[]> wallBreaks = new Dictionary<string, int[]>();
