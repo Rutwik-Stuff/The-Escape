@@ -36,7 +36,7 @@ public class MainLogic : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
     private void fillBenches(){
-        benches[0] = new float[]{0, -2.4f, 0};
+        benches[0] = new float[]{0, -2.4f, 0}; //x y lvl
     }
     
     void Update()
@@ -64,7 +64,21 @@ public class MainLogic : MonoBehaviour
     public void death(){
         Movement.startPosX = benches[sv.LastBenchID][0];
         Movement.startPosY = benches[sv.LastBenchID][1];
-        SceneManager.LoadScene("lvl" + benches[sv.LastBenchID][2]);
+        SceneManager.LoadScene("lvl" + sv.getCurrentSaveId());
 
+    }
+    public void launchSave(string id){
+        sv.setSaveID(id);
+        sv.loadLastBenchId();
+        int lastbenchid = sv.getIntSave("LastBenchID");
+        if(lastbenchid<0) lastbenchid = 0;
+        Debug.Log(lastbenchid + "lastbenchid");
+        for(int i = 0; i < benches.Count; i++){
+            if(i == lastbenchid){ //if benches id in level matches last bench id of that level
+                Movement.startPosX = benches[i][0];
+                Movement.startPosY = benches[i][1];
+                SceneManager.LoadScene("lvl" + benches[i][2]);
+            }
+        }
     }
 }

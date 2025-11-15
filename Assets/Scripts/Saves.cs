@@ -9,7 +9,8 @@ public class Saves : MonoBehaviour
     public int AirJumpUnlocked;
     public int DashUnlocked;
     public int LastBenchID = 0; //default
-    public string curentSaveID = "0";
+    private string curentSaveID = "0";
+    public string lvlTime;
 
     private Dictionary<string, int[]> wallBreaks = new Dictionary<string, int[]>();
     private List<Savable> savables = new List<Savable>();
@@ -56,6 +57,7 @@ public class Saves : MonoBehaviour
         makeIntSave("AirJumpUnlocked", AirJumpUnlocked);
         makeIntSave("DashUnlocked", DashUnlocked);
         makeIntSave("LastBenchID", LastBenchID);
+        makeStringSave("lvlTime", lvlTime);
 
         foreach (var entry in wallBreaks)
         {
@@ -183,5 +185,45 @@ public class Saves : MonoBehaviour
         {
             obj.receiveChanges();
         }
+    }
+    public void setSaveID(string id){
+        curentSaveID = id;
+    }
+    public void createSaveName(string name, string id){
+        PlayerPrefs.SetString(id+"Name", name);
+    }
+    public string loadSaveName(string id){
+        return PlayerPrefs.GetString(id+"Name", "-");
+    }
+    public string getlvlTime(string id){
+        return PlayerPrefs.GetString(id, "-:--");
+    }
+    public void deleteAllForId(string id){
+        PlayerPrefs.DeleteKey(id+"Name");
+        PlayerPrefs.DeleteKey(id+"lvlTime");
+        PlayerPrefs.DeleteKey(id+"HitUnlocked");
+        PlayerPrefs.DeleteKey(id+"WallJumpUnlocked");
+        PlayerPrefs.DeleteKey(id+"AirJumpUnlocked");
+        PlayerPrefs.DeleteKey(id+"DashUnlocked");
+        PlayerPrefs.DeleteKey(id+"LastBenchID");
+        foreach (var entry in wallBreaks)
+        {
+            PlayerPrefs.DeleteKey(id+"wallBreak"+entry.Value[0]);
+        }
+        
+
+    }
+    public bool hasSave(string id){
+        if(PlayerPrefs.HasKey(id+"Name")){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public void loadLastBenchId(){
+        LastBenchID = getIntSave("LastBenchID");
+    }
+    public string getCurrentSaveId(){
+        return curentSaveID;
     }
 }
