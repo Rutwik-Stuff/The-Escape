@@ -37,13 +37,14 @@ public class Movement : MonoBehaviour, Savable
     public Saves sv;
 
     void Start(){
-        if(startX != 0 && startY != 0){
+        if(startPosX != 0 && startPosY != 0){
+            transform.position = new Vector2(startPosX, startPosY);
+        } else {
             Debug.Log(startX + " " + startY);
             transform.position = new Vector2(startX, startY);
-        } else {
-            transform.position = new Vector2(startPosX, startPosY);
         }
-        //sv = FindObjectOfType<Saves>();
+        startPosX = 0;
+        startPosY = 0;
     }
 
     void Update()

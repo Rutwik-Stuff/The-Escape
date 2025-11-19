@@ -92,13 +92,38 @@ public class Saves : MonoBehaviour
         savables = FindObjectsOfType<MonoBehaviour>().OfType<Savable>().ToList();
     }
 
-    private void loadSaves()
-    {
+    public void loadSavesEnforced() {
         HitUnlocked = getIntSave("HitUnlocked");
         WallJumpUnlocked = getIntSave("WallJumpUnlocked");
         AirJumpUnlocked = getIntSave("AirJumpUnlocked");
         DashUnlocked = getIntSave("DashUnlocked");
         LastBenchID = getIntSave("LastBenchID");
+        if(LastBenchID < 0) LastBenchID = 0;
+    
+
+        // Load wallbreak values
+        List<string> keys = new List<string>(wallBreaks.Keys);
+        foreach (var key in keys)
+        {
+            if(!(getIntSave(key)==-1)){
+                wallBreaks[key][1] = getIntSave(key);
+                Debug.Log("WallBreaks load: " + key + " : " + wallBreaks[key][1]);
+            }
+            Debug.Log("WallBreaks state: " + key + " : " + wallBreaks[key][1]);
+            
+        }
+    }
+
+    private void loadSaves()
+    {
+
+        if(HitUnlocked < getIntSave("HitUnlocked")) HitUnlocked = HitUnlocked;
+        WallJumpUnlocked = getIntSave("WallJumpUnlocked");
+        AirJumpUnlocked = getIntSave("AirJumpUnlocked");
+        DashUnlocked = getIntSave("DashUnlocked");
+        LastBenchID = getIntSave("LastBenchID");
+        if(LastBenchID < 0) LastBenchID = 0;
+    
 
         // Load wallbreak values
         List<string> keys = new List<string>(wallBreaks.Keys);
@@ -219,9 +244,6 @@ public class Saves : MonoBehaviour
         } else {
             return false;
         }
-    }
-    public void loadLastBenchId(){
-        LastBenchID = getIntSave("LastBenchID");
     }
     public string getCurrentSaveId(){
         return curentSaveID;

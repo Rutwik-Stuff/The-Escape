@@ -1,0 +1,31 @@
+name: The Escape Beta Build
+
+on:
+  push:
+    branches:
+      - beta-release  # so it relesases on a public release
+
+jobs:
+  build:
+    name: Build project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Cache Unity
+        uses: actions/cache@v3
+
+      - name: Activate Unity
+        uses: game-ci/unity-activate@v2
+        with:
+          email: ${{ secrets.UNITY_EMAIL }}
+          password: ${{ secrets.UNITY_PASSWORD }}
+
+      - name: Build project
+        uses: game-ci/unity-builder@v2
+        with:
+          unityVersion: 2022.3.0f1
+          targetPlatform: StandaloneWindows64
+
