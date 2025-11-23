@@ -4,6 +4,7 @@ using UnityEngine;
 public class WebSocketClient : MonoBehaviour
 {
     WebSocket ws;
+    public string nickname = "rafa";
 
     void Start()
     {
@@ -11,16 +12,22 @@ public class WebSocketClient : MonoBehaviour
 
         ws.OnMessage += (sender, e) =>
         {
-            Debug.Log("Message from server: " + e.Data);
+            if(e.Data == "81"){
+                Debug.Log("received data " + e.Data);
+                ws.Send("1"+nickname);
+            }
+            
         };
-
-        ws.Connect();
-        ws.Send("Hello from Unity!");
+        connectToServer();
     }
 
     void OnDestroy()
     {
         ws.Close();
+    }
+    void connectToServer(){
+        ws.Connect();
+        
     }
 }
 
