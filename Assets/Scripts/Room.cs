@@ -15,4 +15,7 @@ public class Room : MonoBehaviour
         this.name = name;
         this.password = password;
     }
+    public void appendId(string id){
+        this.id = id;
+    }
 }

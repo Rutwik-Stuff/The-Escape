@@ -2,6 +2,8 @@ using WebSocketSharp;
 using UnityEngine;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Debug = UnityEngine.Debug;
+
 
 
 public class WebSocketClient : MonoBehaviour
@@ -9,15 +11,19 @@ public class WebSocketClient : MonoBehaviour
     WebSocket ws;
     public string nickname = "rafa";
 
-    private bool connecting = true;
+    private bool connecting = false;
     private bool isConnected = false;
     private float connectTimeout = 0;
     private bool playerCreated = false;
-    private long roomRefreshTimeout = 0;
+    private float roomRefreshTimeout = 0;
     private long defaultServerTimeout = 2000;
     private Stopwatch sw;
 
-    private List<Room> displayedRooms = new ArrayList<Room>();
+    private List<Room> displayedServerRooms = new List<Room>();
+    private List<Room> displayedMyOfflineRooms = new List<Room>();
+    private List<Room> displayedMyOnlineRooms = new List<Room>();
+
+
 
     void Start()
     {
@@ -26,23 +32,29 @@ public class WebSocketClient : MonoBehaviour
 
         ws.OnMessage += (sender, e) =>
         {
-            switch(e.Data[0]){
-                case 0:
-                case 1: if(e.Data == "11") {
+            Debug.Log("Received"+e.Data);
+            switch(e.Data.Substring(0,1)){
+                case "0": break;
+                case "1": if(e.Data == "11") {
                     Debug.Log("player created successfully");
                     playerCreated = true;
+                    isConnected = false;
                     connecting = false;
                 }
-                case 2:
-                case 3: 
-                case 4:
-                case 5:
-                case 6:
+                break;
+                case "2": if(e.Data.Substring(0,2)=="21"){
 
-                case 7:
-                case 8: 
-                    if(e.Data == "81") {
-                        Debug.Log("Connection Successful!");
+                }
+                break;
+                case "3": break;
+                case "4": break;
+                case "5": break;
+                case "6": break;
+
+                case "7": break;
+                case "8": 
+                    if(e.Data.Substring(0,2) == "81") {
+                        Debug.Log("Connection Successful!"+e.Data.Substring(2));
                         isConnected = true;
                         connecting = false;
                      }
@@ -50,7 +62,6 @@ public class WebSocketClient : MonoBehaviour
             }
             
         };
-        connectToServer();
     }
 
     void OnDestroy()
@@ -58,33 +69,61 @@ public class WebSocketClient : MonoBehaviour
         ws.Close();
     }
     void Update(){
-        if(sw > defaultServerTimeout){
+        if(sw.ElapsedMilliseconds > defaultServerTimeout){
             Debug.Log("Server timeout!");
             isConnected = false;
             playerCreated = false;
             connecting = true;
             sw.Stop();
+            sw.Reset();
         }
         float millis = Time.unscaledTime * 1000f;
 
         if(connecting){
-            if(millis-connectTimeout>500){ //general connection
+            if(millis-connectTimeout>1500){
+                Debug.Log("connecting to server"); //general connection
                 ws.Connect();
                 connectTimeout = millis;
             }
         }
         if(isConnected){
-                if(nickname != ""){ // player creation
-                    ws.Send(showName());
-                    sw.Restart();
-                }
+                Debug.Log("creating player"); // player creation
+                ws.Send(showName());
+                sw.Restart();
             }
         if(playerCreated){
-            if(millis-roomRefreshTimeout>3000){ //room scan
+            if(millis-roomRefreshTimeout>3000){
+                Debug.Log("Requesting rooms"); //room scan
                 ws.Send(getRooms(0));
+                roomRefreshTimeout=millis;
                 sw.Restart();
             }
         }
+
+    }
+
+    public void openMultiplayer(){
+        //connecting = true;
+    }
+    public void closeMultiplayer(){
+        connecting = false;
+        isConnected = false;
+        playerCreated = false;
+        //ws.Close();
+    }
+    public void loadSavedRooms(){
+
+    }
+    public void publishRoom(){
+
+    }
+    public void displayOfflineRooms(){
+        
+    }
+    public void displayMyActiveRooms(){
+
+    }
+    public void displayServerActiveRooms(){
 
     }
     private string createRoom(string name, string password, int id){
@@ -107,6 +146,9 @@ public class WebSocketClient : MonoBehaviour
     }
     private string showName(){
         return "1"+nickname;
+    }
+    private string getMyActiveRooms(){
+        return "";
     }
 }
 

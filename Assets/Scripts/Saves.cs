@@ -231,6 +231,8 @@ public class Saves : MonoBehaviour
         PlayerPrefs.DeleteKey(id+"AirJumpUnlocked");
         PlayerPrefs.DeleteKey(id+"DashUnlocked");
         PlayerPrefs.DeleteKey(id+"LastBenchID");
+        PlayerPrefs.DeleteKey(id+"PWD");
+        PlayerPrefs.DeleteKey(id+"UID");
         foreach (var entry in wallBreaks)
         {
             PlayerPrefs.DeleteKey(id+"wallBreak"+entry.Value[0]);
@@ -247,5 +249,17 @@ public class Saves : MonoBehaviour
     }
     public string getCurrentSaveId(){
         return curentSaveID;
+    }
+    public void saveRoom(string name, string password, string id, string uid){
+        PlayerPrefs.SetString("R"+id+"Name", name);
+        PlayerPrefs.SetString("R"+id+"PWD", password);
+        PlayerPrefs.SetString("R"+id+"UID", uid);
+        setSaveID("R"+id);
+        loadSavesEnforced();
+        makeLatestSave();
+
+    }
+    public string loadPwd(string id){
+        return PlayerPrefs.GetString("R"+id+"PWD");
     }
 }
