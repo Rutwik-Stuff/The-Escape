@@ -20,7 +20,7 @@ public class multiplayerFill : MonoBehaviour
         Saves sv = FindObjectOfType<Saves>();
         string nameText = inputName.text+"          ";
         string pwdText = inputPwd.text+"          ";
-        sv.saveRoom(nameText.Substring(0,9), pwdText.Substring(0, 9), id, "-");
+        sv.saveRoom(nameText.Substring(0,9).Replace(" ", ""), pwdText.Substring(0, 9).Replace(" ", ""), id, "-");
         spmm.showDetails();
         gameObject.SetActive(false);
     }

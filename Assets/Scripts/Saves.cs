@@ -262,4 +262,7 @@ public class Saves : MonoBehaviour
     public string loadPwd(string id){
         return PlayerPrefs.GetString("R"+id+"PWD");
     }
+    public string loadUID(string id){
+        return PlayerPrefs.GetString("R"+id+"UID", "-");
+    }
 }

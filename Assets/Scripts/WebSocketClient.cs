@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Debug = UnityEngine.Debug;
+using TMPro;
 
 
 
@@ -10,17 +11,15 @@ public class WebSocketClient : MonoBehaviour
 {
     WebSocket ws;
     public string nickname = "rafa";
+    public feetback f;
+    public connectWindowController cwc;
 
-    private bool connecting = false;
     private bool isConnected = false;
-    private float connectTimeout = 0;
-    private bool playerCreated = false;
-    private float roomRefreshTimeout = 0;
-    private long defaultServerTimeout = 2000;
+    bool isMultiplayer = false;
     private Stopwatch sw;
+    float connectStart;
 
     private List<Room> displayedServerRooms = new List<Room>();
-    private List<Room> displayedMyOfflineRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
 
 
@@ -36,14 +35,18 @@ public class WebSocketClient : MonoBehaviour
             switch(e.Data.Substring(0,1)){
                 case "0": break;
                 case "1": if(e.Data == "11") {
-                    Debug.Log("player created successfully");
-                    playerCreated = true;
-                    isConnected = false;
-                    connecting = false;
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                        cwc.hide();
+                    });
+                    isConnected = true;
+                    refreshMyActiveRooms();
                 }
                 break;
                 case "2": if(e.Data.Substring(0,2)=="21"){
-
+                    //f.ShowFeedback(e.Data.Substring(2));
+                    //refreshMyActiveRooms();
+                } else {
+                    f.ShowFeedback("idkk");
                 }
                 break;
                 case "3": break;
@@ -56,12 +59,32 @@ public class WebSocketClient : MonoBehaviour
                     if(e.Data.Substring(0,2) == "81") {
                         Debug.Log("Connection Successful!"+e.Data.Substring(2));
                         isConnected = true;
-                        connecting = false;
                      }
+                    break;
+                case "9":
+                    Debug.Log("received my rooms info");
                     break;
             }
             
         };
+        ws.OnError += (sender, e) =>
+        {
+            if(!isConnected) {
+                isConnected = true;
+                UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    cwc.showRetry(e.Message);
+                });
+            } else {
+                closeMultiplayer();
+                openMultiplayer();
+            }
+            
+        };
+        ws.OnOpen += (sender, e) =>
+        {
+            ws.Send(showName());
+        };
+
     }
 
     void OnDestroy()
@@ -69,74 +92,48 @@ public class WebSocketClient : MonoBehaviour
         ws.Close();
     }
     void Update(){
-        if(sw.ElapsedMilliseconds > defaultServerTimeout){
-            Debug.Log("Server timeout!");
-            isConnected = false;
-            playerCreated = false;
-            connecting = true;
-            sw.Stop();
-            sw.Reset();
+        if(isMultiplayer){
+            if (!isConnected && Time.time - connectStart > 10f)
+        {
+            UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                cwc.showRetry("Connection Timeout!");
+            });
+            
+            ws.Close();
         }
-        float millis = Time.unscaledTime * 1000f;
-
-        if(connecting){
-            if(millis-connectTimeout>1500){
-                Debug.Log("connecting to server"); //general connection
-                ws.Connect();
-                connectTimeout = millis;
-            }
         }
-        if(isConnected){
-                Debug.Log("creating player"); // player creation
-                ws.Send(showName());
-                sw.Restart();
-            }
-        if(playerCreated){
-            if(millis-roomRefreshTimeout>3000){
-                Debug.Log("Requesting rooms"); //room scan
-                ws.Send(getRooms(0));
-                roomRefreshTimeout=millis;
-                sw.Restart();
-            }
-        }
+        
 
     }
-
+    public void launchRoom(string name, string password, string uid){
+        ws.Send(createRoom(name, password, uid));
+    }
     public void openMultiplayer(){
-        //connecting = true;
-    }
-    public void closeMultiplayer(){
-        connecting = false;
         isConnected = false;
-        playerCreated = false;
-        //ws.Close();
-    }
-    public void loadSavedRooms(){
-
-    }
-    public void publishRoom(){
-
-    }
-    public void displayOfflineRooms(){
+        isMultiplayer = true;
+        connectStart = Time.time;
+        ws.ConnectAsync();
+        UnityMainThreadDispatcher.Instance().Enqueue(() => {
+            cwc.showConnecting();
+        });
         
     }
-    public void displayMyActiveRooms(){
-
+    public void closeMultiplayer(){
+        ws.Close();
+        isMultiplayer = false;
     }
-    public void displayServerActiveRooms(){
-
+    public void refreshMyActiveRooms(){
+        ws.Send(getMyActiveRooms());
     }
-    private string createRoom(string name, string password, int id){
-        return "2"+name+":"+password;
+    
+    private string createRoom(string name, string password, string id){ //both launches and edits room
+        return "2"+name+":"+password+":"+id;
     }
     private string joinRoom(string name, string id){
         return "3"+name+":"+id;
     }
     private string leaveRoom(){
         return "4";
-    }
-    private string changeRoom(string name, string password){
-        return "5"+name+":"+password;
     }
     private string sendCoords(float x, float y, float vx, float vy){
         return "6"+x+":"+y+":"+vx+":"+vy+":"+nickname;
@@ -148,7 +145,7 @@ public class WebSocketClient : MonoBehaviour
         return "1"+nickname;
     }
     private string getMyActiveRooms(){
-        return "";
+        return "7";
     }
 }
 

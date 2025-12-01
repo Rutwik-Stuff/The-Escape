@@ -15,6 +15,7 @@ public class MenuController : MonoBehaviour
         multiplayerPanel.SetActive(true);
     }
     public void disableMultiplayerPanel(){
+        FindObjectOfType<WebSocketClient>().closeMultiplayer();
         multiplayerPanel.SetActive(false);
     }
 }
