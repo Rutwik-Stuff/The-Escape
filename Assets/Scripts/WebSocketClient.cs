@@ -11,7 +11,6 @@ public class WebSocketClient : MonoBehaviour
 {
     WebSocket ws;
     public string nickname = "rafa";
-    public feetback f;
     public connectWindowController cwc;
 
     private bool isConnected = false;
