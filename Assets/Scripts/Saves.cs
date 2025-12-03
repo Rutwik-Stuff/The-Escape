@@ -265,4 +265,7 @@ public class Saves : MonoBehaviour
     public string loadUID(string id){
         return PlayerPrefs.GetString("R"+id+"UID", "-");
     }
+    public void changeUID(string id, string uid){
+        PlayerPrefs.SetString("R"+id+"UID", uid);
+    }
 }

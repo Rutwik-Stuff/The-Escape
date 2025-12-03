@@ -839,7 +839,7 @@ PrefabInstance:
     - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
       propertyPath: f
       value: 
-      objectReference: {fileID: 1217701519}
+      objectReference: {fileID: 0}
     - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
       propertyPath: cwc
       value: 
@@ -11104,7 +11104,6 @@ GameObject:
   - component: {fileID: 1217701516}
   - component: {fileID: 1217701518}
   - component: {fileID: 1217701517}
-  - component: {fileID: 1217701519}
   m_Layer: 5
   m_Name: multiplayer
   m_TagString: Untagged
@@ -11178,20 +11177,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1217701515}
   m_CullTransparentMesh: 1
---- !u!114 &1217701519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1217701515}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56249f1c3ec3cbb4b9765a5e8d793184, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::feetback
-  text: {fileID: 908531667}
-  obj: {fileID: 293930174}
 --- !u!1 &1221188020
 GameObject:
   m_ObjectHideFlags: 0
@@ -14128,6 +14113,7 @@ GameObject:
   - component: {fileID: 1469688356}
   - component: {fileID: 1469688358}
   - component: {fileID: 1469688357}
+  - component: {fileID: 1469688359}
   m_Layer: 5
   m_Name: serverFeedback
   m_TagString: Untagged
@@ -14152,8 +14138,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -1.6760254, y: -0.8380127}
+  m_SizeDelta: {x: -43.574, y: -25.1388}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1469688357
 MonoBehaviour:
@@ -14193,6 +14179,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469688355}
   m_CullTransparentMesh: 1
+--- !u!114 &1469688359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469688355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56249f1c3ec3cbb4b9765a5e8d793184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::feetback
+  text: {fileID: 908531667}
+  self: {fileID: 1469688355}
 --- !u!1 &1494132556
 GameObject:
   m_ObjectHideFlags: 0

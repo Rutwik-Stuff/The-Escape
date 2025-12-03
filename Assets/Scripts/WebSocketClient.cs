@@ -18,6 +18,7 @@ public class WebSocketClient : MonoBehaviour
     bool isMultiplayer = false;
     private Stopwatch sw;
     float connectStart;
+    public Saves sv;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
@@ -26,6 +27,7 @@ public class WebSocketClient : MonoBehaviour
 
     void Start()
     {
+        sv = FindObjectOfType<Saves>();
         sw = new Stopwatch();
         ws = new WebSocket("ws://localhost:8080");
 
@@ -43,8 +45,9 @@ public class WebSocketClient : MonoBehaviour
                 }
                 break;
                 case "2": if(e.Data.Substring(0,2)=="21"){
-                    //f.ShowFeedback(e.Data.Substring(2));
-                    //refreshMyActiveRooms();
+                    string[] parts  = e.Data.Split(":");
+                    sv.changeUID(parts[1], parts[2]);
+
                 } else {
                     f.ShowFeedback("idkk");
                 }
@@ -69,14 +72,15 @@ public class WebSocketClient : MonoBehaviour
         };
         ws.OnError += (sender, e) =>
         {
+            Debug.Log("Encountered error!");
             if(!isConnected) {
                 isConnected = true;
                 UnityMainThreadDispatcher.Instance().Enqueue(() => {
                     cwc.showRetry(e.Message);
                 });
             } else {
-                closeMultiplayer();
-                openMultiplayer();
+                Debug.Log("asdf");
+                f.ShowFeedback(e.Message);
             }
             
         };
@@ -96,6 +100,7 @@ public class WebSocketClient : MonoBehaviour
             if (!isConnected && Time.time - connectStart > 10f)
         {
             UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                Debug.Log("Timeout");
                 cwc.showRetry("Connection Timeout!");
             });
             
@@ -105,8 +110,8 @@ public class WebSocketClient : MonoBehaviour
         
 
     }
-    public void launchRoom(string name, string password, string uid){
-        ws.Send(createRoom(name, password, uid));
+    public void launchRoom(string name, string password, string uid, string id){
+        ws.Send(createRoom(name, password, uid, id));
     }
     public void openMultiplayer(){
         isConnected = false;
@@ -126,8 +131,8 @@ public class WebSocketClient : MonoBehaviour
         ws.Send(getMyActiveRooms());
     }
     
-    private string createRoom(string name, string password, string id){ //both launches and edits room
-        return "2"+name+":"+password+":"+id;
+    private string createRoom(string name, string password, string uid, string id){ //both launches and edits room
+        return "2"+name+":"+password+":"+uid+":"+id;
     }
     private string joinRoom(string name, string id){
         return "3"+name+":"+id;

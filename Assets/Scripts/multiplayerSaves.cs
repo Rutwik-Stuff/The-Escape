@@ -45,7 +45,7 @@ public class multiplayerSaves : MonoBehaviour
         delete.gameObject.SetActive(false);
     }
     public void hostRoom(){
-        w.launchRoom(sv.loadSaveName("R"+id), sv.loadPwd(id), sv.loadUID(id));
+        w.launchRoom(sv.loadSaveName("R"+id), sv.loadPwd(id), sv.loadUID(id), id);
 
     }
      public void deletesaves(){
