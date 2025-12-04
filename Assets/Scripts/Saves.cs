@@ -265,7 +265,20 @@ public class Saves : MonoBehaviour
     public string loadUID(string id){
         return PlayerPrefs.GetString("R"+id+"UID", "-");
     }
-    public void changeUID(string id, string uid){
-        PlayerPrefs.SetString("R"+id+"UID", uid);
-    }
-}
+    public void changeUID(string id, string uid)
+{
+    id = id.Trim();
+    uid = uid.Trim();
+
+    // Remove any dangerous characters
+    id = new string(id.Where(c => c >= 32 && c <= 126).ToArray());
+    uid = new string(uid.Where(c => c >= 32 && c <= 126).ToArray());
+
+    string key = $"R{id}UID";
+
+    Debug.Log("Saving PlayerPrefs key: " + key + "  value: " + uid);
+
+    PlayerPrefs.SetString(key, uid);
+    PlayerPrefs.Save();
+}}
+

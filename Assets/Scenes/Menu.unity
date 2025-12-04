@@ -839,7 +839,7 @@ PrefabInstance:
     - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
       propertyPath: f
       value: 
-      objectReference: {fileID: 1217701519}
+      objectReference: {fileID: 1469688359}
     - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
       propertyPath: cwc
       value: 
@@ -848,6 +848,10 @@ PrefabInstance:
       propertyPath: retry
       value: 
       objectReference: {fileID: 2040379377}
+    - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
+      propertyPath: fpanel
+      value: 
+      objectReference: {fileID: 1469688355}
     - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
       propertyPath: errorText
       value: 
@@ -11190,8 +11194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56249f1c3ec3cbb4b9765a5e8d793184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::feetback
-  text: {fileID: 908531667}
-  obj: {fileID: 293930174}
 --- !u!1 &1221188020
 GameObject:
   m_ObjectHideFlags: 0
@@ -12455,8 +12457,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: feetback, Assembly-CSharp
+      - m_Target: {fileID: 1469688359}
+        m_TargetAssemblyTypeName: feedbackController, Assembly-CSharp
         m_MethodName: close
         m_Mode: 1
         m_Arguments:
@@ -14128,6 +14130,7 @@ GameObject:
   - component: {fileID: 1469688356}
   - component: {fileID: 1469688358}
   - component: {fileID: 1469688357}
+  - component: {fileID: 1469688359}
   m_Layer: 5
   m_Name: serverFeedback
   m_TagString: Untagged
@@ -14193,6 +14196,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469688355}
   m_CullTransparentMesh: 1
+--- !u!114 &1469688359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469688355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac7eee7461477794cbfcc90361c7382b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  message: {fileID: 908531667}
 --- !u!1 &1494132556
 GameObject:
   m_ObjectHideFlags: 0

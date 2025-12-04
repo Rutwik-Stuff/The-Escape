@@ -18,6 +18,8 @@ public class WebSocketClient : MonoBehaviour
     private Stopwatch sw;
     float connectStart;
     public Saves sv;
+    public feedbackController f;
+    public GameObject fpanel;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
@@ -43,14 +45,24 @@ public class WebSocketClient : MonoBehaviour
                     refreshMyActiveRooms();
                 }
                 break;
-                case "2": if(e.Data.Substring(0,2)=="21"){
-                    string[] parts  = e.Data.Split(":");
-                    sv.changeUID(parts[1], parts[2]);
-
-                } else {
-                    f.ShowFeedback("idkk");
+                case "2":
+                    string msg = e.Data.Trim();
+                    string[] parts = msg.Split(':');
+                    if (parts.Length >= 3 && parts[0] == "21")
+                        {
+                           UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                        sv.changeUID(parts[1], parts[2]);
+                    }); 
+                     
+                        }   
+                else {
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                        fpanel.SetActive(true);
+                        f.showMessage(parts[1]);
+                        });
                 }
                 break;
+
                 case "3": break;
                 case "4": break;
                 case "5": break;
@@ -79,7 +91,11 @@ public class WebSocketClient : MonoBehaviour
                 });
             } else {
                 Debug.Log("asdf");
-                f.ShowFeedback(e.Message);
+                UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    fpanel.SetActive(true);
+                    f.showMessage(e.Message);
+                });
+                
             }
             
         };
@@ -106,7 +122,6 @@ public class WebSocketClient : MonoBehaviour
             ws.Close();
         }
         }
-        
 
     }
     public void launchRoom(string name, string password, string uid, string id){
