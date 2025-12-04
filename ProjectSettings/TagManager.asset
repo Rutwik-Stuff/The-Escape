@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 3
   tags:
   - jumpable
+  - wjump
+  - death
+  - Hit
+  - Hit_Death
   layers:
   - Default
   - TransparentFX
