@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using Debug = UnityEngine.Debug;
 using TMPro;
+using System;
 
 
 
@@ -77,6 +78,21 @@ public class WebSocketClient : MonoBehaviour
                     break;
                 case "9":
                     Debug.Log("received my rooms info");
+                    clearActiveRoomList();
+                    if(e.Data.Contains(";")){
+                        string[] rooms = e.Data.Split(";");
+                        foreach(string part in rooms){
+                            Debug.Log("Part: '"+part+"'");
+                        }
+                    for(int i = 1; i < rooms.Length; i++){
+                        string[] parts1 = rooms[i].Split(":");
+                        Debug.Log("I"+i);
+                        addRoomToMyOnlineList(int.Parse(parts1[3]), parts1[0], parts1[2], parts1[1]);
+                        Debug.Log("I"+i); //count, name, id, pwd
+                    }
+                    }
+                    
+
                     break;
             }
             
@@ -143,6 +159,18 @@ public class WebSocketClient : MonoBehaviour
     }
     public void refreshMyActiveRooms(){
         ws.Send(getMyActiveRooms());
+    }
+    void clearActiveRoomList(){
+        displayedMyOnlineRooms.Clear();
+    }
+    void addRoomToMyOnlineList(int playerCount, string name, string id, string pwd){
+        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+{
+    
+    displayedMyOnlineRooms.Add(new Room(name, id, playerCount, pwd));
+    Debug.Log("roomadd"); 
+});
+
     }
     
     private string createRoom(string name, string password, string uid, string id){ //both launches and edits room

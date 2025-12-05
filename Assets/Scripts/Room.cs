@@ -1,21 +1,18 @@
 using UnityEngine;
-public class Room : MonoBehaviour
+[System.Serializable]
+public class Room
 {
-    private string[] playerlist;
+    private int playerCount;
     private string name;
     private string id;
-    private int password;
+    private string password;
 
-    public Room(string name, string id, string[] playerlist){ //to display others' rooms
+    public Room(string name, string id, int playerCount, string password){
+         //to display others' rooms
         this.name = name;
         this.id = id;
-        this.playerlist = playerlist;
-    }
-    public Room(string name, int password){ //to create own , new room
-        this.name = name;
+        this.playerCount = playerCount;
         this.password = password;
-    }
-    public void appendId(string id){
-        this.id = id;
+        Debug.Log("constructor");
     }
 }
