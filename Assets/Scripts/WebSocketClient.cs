@@ -21,6 +21,7 @@ public class WebSocketClient : MonoBehaviour
     public Saves sv;
     public feedbackController f;
     public GameObject fpanel;
+    public ActiveRoomsController r;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
@@ -32,6 +33,7 @@ public class WebSocketClient : MonoBehaviour
         sv = FindObjectOfType<Saves>();
         sw = new Stopwatch();
         ws = new WebSocket("ws://localhost:8080");
+       
 
         ws.OnMessage += (sender, e) =>
         {
@@ -89,9 +91,12 @@ public class WebSocketClient : MonoBehaviour
                         Debug.Log("I"+i);
                         addRoomToMyOnlineList(int.Parse(parts1[3]), parts1[0], parts1[2], parts1[1]);
                         Debug.Log("I"+i); //count, name, id, pwd
+                        
                     }
                     }
-                    
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    r.refresh();
+                });
 
                     break;
             }
@@ -193,6 +198,17 @@ public class WebSocketClient : MonoBehaviour
     }
     private string getMyActiveRooms(){
         return "7";
+    }
+    public bool hasId(int id){
+        Debug.Log(displayedMyOnlineRooms.Count + " " + id);
+        if(displayedMyOnlineRooms.Count>id){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public Room getRoomFromMyRoomList(int id){
+        return displayedMyOnlineRooms[id];
     }
 }
 
