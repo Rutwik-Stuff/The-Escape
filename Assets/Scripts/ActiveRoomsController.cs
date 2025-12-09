@@ -8,6 +8,8 @@ public class ActiveRoomsController : MonoBehaviour
 
     private ActiveRoomController lastSelected;
 
+    public WebSocketClient w;
+
     public void roomClicked(int id){
         Debug.Log("Room Clicked "+ id);
     }
@@ -33,10 +35,17 @@ public class ActiveRoomsController : MonoBehaviour
         }
     }
     public void stop(){
-
+        checkSelected();
+        if(lastSelected != null){
+            Debug.Log("Selected to stop "+ lastSelected.id);
+            w.stopActivRoom(lastSelected.id);
+        }
     }
     public void players(){
-
+        checkSelected();
+        if(lastSelected != null){
+            Debug.Log("Selected to players "+ lastSelected.id);
+        }
     }
 
     

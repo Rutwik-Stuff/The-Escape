@@ -39,7 +39,10 @@ public class WebSocketClient : MonoBehaviour
         {
             Debug.Log("Received"+e.Data);
             switch(e.Data.Substring(0,1)){
-                case "0": break;
+                case "0": 
+                Debug.Log("Room stopped");
+                refreshMyActiveRooms();
+                break;
                 case "1": if(e.Data == "11") {
                     UnityMainThreadDispatcher.Instance().Enqueue(() => {
                         cwc.hide();
@@ -81,6 +84,7 @@ public class WebSocketClient : MonoBehaviour
                 case "9":
                     Debug.Log("received my rooms info");
                     clearActiveRoomList();
+                    Debug.Log("roomlistsize"+displayedMyOnlineRooms.Count);
                     if(e.Data.Contains(";")){
                         string[] rooms = e.Data.Split(";");
                         foreach(string part in rooms){
@@ -158,6 +162,9 @@ public class WebSocketClient : MonoBehaviour
         });
         
     }
+    public void stopActivRoom(int id){
+        ws.Send(stopMyRoom(displayedMyOnlineRooms[id].id));
+    }
     public void closeMultiplayer(){
         ws.Close();
         isMultiplayer = false;
@@ -198,6 +205,9 @@ public class WebSocketClient : MonoBehaviour
     }
     private string getMyActiveRooms(){
         return "7";
+    }
+    private string stopMyRoom(string uid){
+        return "8"+uid;
     }
     public bool hasId(int id){
         Debug.Log(displayedMyOnlineRooms.Count + " " + id);
