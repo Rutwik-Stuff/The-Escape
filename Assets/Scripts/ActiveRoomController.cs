@@ -2,9 +2,10 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 
-public class ActiveRoomController : MonoBehaviour
+public class ActiveRoomController : MonoBehaviour, IDeselectHandler
 {
     public TMP_Text name;
     public TMP_Text password;
@@ -12,6 +13,8 @@ public class ActiveRoomController : MonoBehaviour
     public TMP_InputField uid;
 
     public int id;
+
+    public ActiveRoomsController parent;
 
     public WebSocketClient w;
 
@@ -46,5 +49,27 @@ public class ActiveRoomController : MonoBehaviour
         w = FindObjectOfType<WebSocketClient>();
         hide();
     }
-    
+
+    public bool isSelected(){
+        Debug.Log(EventSystem.current.currentSelectedGameObject == gameObject);
+        return EventSystem.current.currentSelectedGameObject == gameObject;
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        
+        StartCoroutine(SelectNextFrame());
+        
+    }
+    IEnumerator SelectNextFrame()
+{
+    yield return null; 
+    GameObject selected = EventSystem.current.currentSelectedGameObject;
+
+if (selected != null && selected.CompareTag("unselectable"))
+{
+    Debug.Log("Reselecting");
+            EventSystem.current.SetSelectedGameObject(gameObject);
+}
+}
 }

@@ -6,6 +6,8 @@ public class ActiveRoomsController : MonoBehaviour
     public ActiveRoomController room2;
     public ActiveRoomController room3;
 
+    private ActiveRoomController lastSelected;
+
     public void roomClicked(int id){
         Debug.Log("Room Clicked "+ id);
     }
@@ -15,4 +17,27 @@ public class ActiveRoomsController : MonoBehaviour
         room2.showIfNeeded();
         room3.showIfNeeded();
     }
+
+    public void checkSelected(){
+        if(room1.isSelected()) lastSelected = room1;
+        else if(room2.isSelected()) lastSelected = room2;
+        else if(room3.isSelected()) lastSelected = room3;
+        else lastSelected = null;
+
+    }
+
+    public void join(){
+        checkSelected();
+        if(lastSelected != null){
+            Debug.Log("Selected to join "+ lastSelected.id);
+        }
+    }
+    public void stop(){
+
+    }
+    public void players(){
+
+    }
+
+    
 }
