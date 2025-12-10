@@ -11,6 +11,8 @@ public class ServerRoomsController : MonoBehaviour
 
     public WebSocketClient w;
 
+    public ServerRoomController lastSelected;
+
     private int page = 1;
 
     public int getPage(){
@@ -27,5 +29,21 @@ public class ServerRoomsController : MonoBehaviour
         room5.showIfNeeded();
     }
 
+    public void checkSelected(){
+        if(room0.isSelected()) lastSelected = room0;
+        else if(room1.isSelected()) lastSelected = room1;
+        else if(room2.isSelected()) lastSelected = room2;
+        else if(room3.isSelected()) lastSelected = room3;
+        else if(room4.isSelected()) lastSelected = room4;
+        else if(room5.isSelected()) lastSelected = room5;
+        else lastSelected = null;
 
+    }
+    public void join(){
+        checkSelected();
+        if(lastSelected != null){
+            Debug.Log("Selected to join "+ lastSelected.id);
+        }
+
+    }
 }

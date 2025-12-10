@@ -1,8 +1,10 @@
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using System.Collections;
+using UnityEngine.EventSystems;
 
-public class ServerRoomController : MonoBehaviour
+public class ServerRoomController : MonoBehaviour, IDeselectHandler
 {
     public TMP_Text name;
     public TMP_Text host;
@@ -44,5 +46,27 @@ public class ServerRoomController : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
+    public bool isSelected(){
+        Debug.Log(EventSystem.current.currentSelectedGameObject == gameObject);
+        return EventSystem.current.currentSelectedGameObject == gameObject;
+    }
+    public void OnDeselect(BaseEventData eventData)
+    {
+        
+        StartCoroutine(SelectNextFrame());
+        
+    }
+    IEnumerator SelectNextFrame()
+{
+    yield return null; 
+    GameObject selected = EventSystem.current.currentSelectedGameObject;
+
+if (selected != null && selected.CompareTag("unselectable2"))
+{
+    Debug.Log("Reselecting");
+            EventSystem.current.SetSelectedGameObject(gameObject);
+}
+}
 }
 

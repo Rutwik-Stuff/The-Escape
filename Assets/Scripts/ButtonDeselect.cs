@@ -5,6 +5,7 @@ using System.Collections;
 public class ButtonDeselect : MonoBehaviour
 {
     public ActiveRoomsController controller;
+    public ServerRoomsController scontroller;
 
     public void onClick(string factory){
         if(factory == "join"){
@@ -13,6 +14,8 @@ public class ButtonDeselect : MonoBehaviour
             StartCoroutine(stop());
         } else if(factory == "players"){
             StartCoroutine(players());
+        } else if(factory == "sjoin"){
+            StartCoroutine(sjoin());
         }
         
     }
@@ -23,6 +26,14 @@ public class ButtonDeselect : MonoBehaviour
         yield return null;
 
         controller.join();
+    }
+
+    IEnumerator sjoin(){
+        yield return null;
+        yield return null;
+        yield return null;
+
+        scontroller.join();
     }
 
     IEnumerator stop(){

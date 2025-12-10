@@ -10,6 +10,7 @@ TagManager:
   - Hit
   - Hit_Death
   - unselectable
+  - unselectable2
   layers:
   - Default
   - TransparentFX
