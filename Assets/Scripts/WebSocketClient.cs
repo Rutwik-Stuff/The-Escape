@@ -22,6 +22,7 @@ public class WebSocketClient : MonoBehaviour
     public feedbackController f;
     public GameObject fpanel;
     public ActiveRoomsController r;
+    public ServerRoomsController s;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
@@ -72,7 +73,21 @@ public class WebSocketClient : MonoBehaviour
                 case "3": break;
                 case "4": break;
                 case "5": break;
-                case "6": break;
+                case "6": 
+                    Debug.Log("Received server rooms");
+                    clearServerRoomList();
+                    if(e.Data.Contains(";")){
+                        string[] rooms = e.Data.Split(";");
+                        for(int i = 1; i < rooms.Length; i++){
+                            string[] parts2 = rooms[i].Split(":");
+                            addRoomToServerList(parts2[0], parts2[1], parts2[2], int.Parse(parts2[3]));
+                        }
+                    }
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    s.refresh();
+                });
+                    
+                    break;
 
                 case "7": break;
                 case "8": 
@@ -172,8 +187,14 @@ public class WebSocketClient : MonoBehaviour
     public void refreshMyActiveRooms(){
         ws.Send(getMyActiveRooms());
     }
+    public void refreshServerRooms(){
+        ws.Send(getRooms(s.getPage()));
+    }
     void clearActiveRoomList(){
         displayedMyOnlineRooms.Clear();
+    }
+    void clearServerRoomList(){
+        displayedServerRooms.Clear();
     }
     void addRoomToMyOnlineList(int playerCount, string name, string id, string pwd){
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
@@ -183,6 +204,15 @@ public class WebSocketClient : MonoBehaviour
     Debug.Log("roomadd"); 
 });
 
+    }
+    void addRoomToServerList(string name, string host, string id, int playerCount){
+        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+{
+    
+    displayedServerRooms.Add(new Room(name, host, id, playerCount));
+    Debug.Log("roomadd"); 
+    Debug.Log("Server rooms list size "+displayedServerRooms.Count);
+});
     }
     
     private string createRoom(string name, string password, string uid, string id){ //both launches and edits room
@@ -217,8 +247,18 @@ public class WebSocketClient : MonoBehaviour
             return false;
         }
     }
+    public bool hasSId(int id){
+        if(displayedServerRooms.Count>id){
+            return true;
+        } else {
+            return false;
+        }
+    }
     public Room getRoomFromMyRoomList(int id){
         return displayedMyOnlineRooms[id];
+    }
+    public Room getRoomFromServerList(int id){
+        return displayedServerRooms[id];
     }
 }
 
