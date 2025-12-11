@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using TMPro;
 public class ServerRoomsController : MonoBehaviour
 {
     public ServerRoomController room0;
@@ -8,6 +8,14 @@ public class ServerRoomsController : MonoBehaviour
     public ServerRoomController room3;
     public ServerRoomController room4;
     public ServerRoomController room5;
+
+    public GameObject addressPanel;
+    public TMP_InputField address;
+
+    public GameObject leftArrow;
+    public GameObject rightArrow;
+
+    public TMP_Text pageCount;
 
     public WebSocketClient w;
 
@@ -45,5 +53,33 @@ public class ServerRoomsController : MonoBehaviour
             Debug.Log("Selected to join "+ lastSelected.id);
         }
 
+    }
+    public void nextPage(){
+        page++;
+        if(page > 10){
+            page = 1;
+        }
+        pageCount.text = page.ToString();
+            w.refreshServerRooms();
+    }
+    public void prevPage(){
+        page--;
+        if(page < 1){
+            page = 10;
+            
+        }
+        pageCount.text = page.ToString();
+            w.refreshServerRooms();
+    }
+    public void showAddressPanel(){
+        addressPanel.SetActive(true);
+    }
+    public void closeAddresspanel(){
+        address.text = "";
+        addressPanel.SetActive(false);
+    }
+    public void joinByAddress(){
+        //join
+        addressPanel.SetActive(false);
     }
 }
