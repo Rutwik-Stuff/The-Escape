@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using Debug = UnityEngine.Debug;
 using TMPro;
-using System;
+using System.Collections;
 
 
 
@@ -23,10 +23,50 @@ public class WebSocketClient : MonoBehaviour
     public GameObject fpanel;
     public ActiveRoomsController r;
     public ServerRoomsController s;
+    public StatsController stc;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
 
+
+
+    bool gotResponse = false;
+    string[] lastResponse = null;
+
+    IEnumerator PollServerLoop() {
+        while (isConnected) {
+            Debug.Log("debug");
+            lastResponse = null;
+            Debug.Log("debug");
+            if(ws.ReadyState == WebSocketState.Open){
+                ws.Send("9");
+            } else {
+                Debug.Log("shutting down");
+                closeMultiplayer();
+                isConnected = false;
+                openMultiplayer();
+            }
+            
+            Debug.Log("debug"); //to request server data and to kind of ping it
+
+            // wait for server to respond
+            yield return new WaitForSeconds(3f);
+
+            if (gotResponse && lastResponse != null) {
+                Debug.Log("Server answered: " + lastResponse[1]+lastResponse[2]);
+                gotResponse = false;
+                UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                       stc.updateStats(lastResponse[2], lastResponse[1]);
+                    });
+                
+            } else {
+                Debug.Log("shutting down");
+                closeMultiplayer();
+                isConnected = false;
+                openMultiplayer();
+            }
+        }
+    }
 
 
     void Start()
@@ -61,8 +101,7 @@ public class WebSocketClient : MonoBehaviour
                         sv.changeUID(parts[1], parts[2]);
                     }); 
                      
-                        }   
-                else {
+                        } else {
                     UnityMainThreadDispatcher.Instance().Enqueue(() => {
                         fpanel.SetActive(true);
                         f.showMessage(parts[1]);
@@ -89,11 +128,21 @@ public class WebSocketClient : MonoBehaviour
                     
                     break;
 
-                case "7": break;
+                case "7": 
+                    gotResponse = true;
+                    lastResponse = e.Data.Split(":");
+
+                break;
                 case "8": 
                     if(e.Data.Substring(0,2) == "81") {
                         Debug.Log("Connection Successful!"+e.Data.Substring(2));
                         isConnected = true;
+                        Debug.Log("debug");
+                        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+{
+    StartCoroutine(PollServerLoop());
+});
+
                      }
                     break;
                 case "9":
