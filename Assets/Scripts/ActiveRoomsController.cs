@@ -31,7 +31,7 @@ public class ActiveRoomsController : MonoBehaviour
     public void join(){
         checkSelected();
         if(lastSelected != null){
-            Debug.Log("Selected to join "+ lastSelected.id);
+            w.joinMyRoom(lastSelected.id);        
         }
     }
     public void stop(){

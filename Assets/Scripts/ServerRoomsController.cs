@@ -50,7 +50,7 @@ public class ServerRoomsController : MonoBehaviour
     public void join(){
         checkSelected();
         if(lastSelected != null){
-            Debug.Log("Selected to join "+ lastSelected.id);
+            w.joinServerRoom(lastSelected.id);
         }
 
     }
