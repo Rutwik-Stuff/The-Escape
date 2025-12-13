@@ -24,6 +24,7 @@ public class WebSocketClient : MonoBehaviour
     public ActiveRoomsController r;
     public ServerRoomsController s;
     public StatsController stc;
+    public pwdInputController pic;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
@@ -35,9 +36,7 @@ public class WebSocketClient : MonoBehaviour
 
     IEnumerator PollServerLoop() {
         while (isConnected) {
-            Debug.Log("debug");
             lastResponse = null;
-            Debug.Log("debug");
             if(ws.ReadyState == WebSocketState.Open){
                 ws.Send("9");
             } else {
@@ -47,13 +46,10 @@ public class WebSocketClient : MonoBehaviour
                 openMultiplayer();
             }
             
-            Debug.Log("debug"); //to request server data and to kind of ping it
-
             // wait for server to respond
             yield return new WaitForSeconds(3f);
 
             if (gotResponse && lastResponse != null) {
-                Debug.Log("Server answered: " + lastResponse[1]+lastResponse[2]);
                 gotResponse = false;
                 UnityMainThreadDispatcher.Instance().Enqueue(() => {
                        stc.updateStats(lastResponse[2], lastResponse[1]);
@@ -109,7 +105,19 @@ public class WebSocketClient : MonoBehaviour
                 }
                 break;
 
-                case "3": break;
+                case "3": 
+                    if(e.Data.StartsWith("3p")){
+                        //ask user for password. 
+                        UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    pic.showInputPassword(e.Data.Substring(2));
+                });
+                        
+                    } else if(e.Data.StartsWith("30")){
+                        UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                        f.showMessage(e.Data.Substring(2));
+                        });
+                    }
+                break;
                 case "4": break;
                 case "5": break;
                 case "6": 
@@ -197,7 +205,9 @@ public class WebSocketClient : MonoBehaviour
 
     void OnDestroy()
     {
-        ws.Close();
+        if(ws.ReadyState == WebSocketState.Open){
+                ws.Close();
+            }
     }
     void Update(){
         if(isMultiplayer){
@@ -230,8 +240,11 @@ public class WebSocketClient : MonoBehaviour
         ws.Send(stopMyRoom(displayedMyOnlineRooms[id].id));
     }
     public void closeMultiplayer(){
-        ws.Close();
+       if(ws.ReadyState == WebSocketState.Open){
+                ws.Close();
+            }
         isMultiplayer = false;
+        isConnected = false;
     }
     public void refreshMyActiveRooms(){
         ws.Send(getMyActiveRooms());
@@ -267,8 +280,11 @@ public class WebSocketClient : MonoBehaviour
     private string createRoom(string name, string password, string uid, string id){ //both launches and edits room
         return "2"+name+":"+password+":"+uid+":"+id;
     }
-    private string joinRoom(string name, string id){
-        return "3"+name+":"+id;
+    private string joinRoom(string id){
+        return "3"+id;
+    }
+    private string joinRoomPwd(string id, string pwd){
+        return 3+id+":"+pwd;
     }
     private string leaveRoom(){
         return "4";
@@ -309,5 +325,15 @@ public class WebSocketClient : MonoBehaviour
     public Room getRoomFromServerList(int id){
         return displayedServerRooms[id];
     }
+    public void joinMyRoom(int id){
+        ws.Send(joinRoom(sv.loadUID(id.ToString())));
+    }
+    public void joinServerRoom(int id){
+        ws.Send(joinRoom(displayedServerRooms[id].id));
+    }
+    public void joinByAddress(string id, string pwd){
+        ws.Send(joinRoomPwd(id, pwd));
+    }
 }
+
 
