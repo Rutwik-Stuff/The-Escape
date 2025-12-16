@@ -36,7 +36,8 @@ public class MainLogic : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
     private void fillBenches(){
-        benches[0] = new float[]{0, -2.4f, 0}; //x y lvl
+        benches[0] = new float[]{0, -2.4f, 0};
+        benches[1] = new float[]{3, 3.5f, 4}; //x y lvl
     }
     
     void Update()

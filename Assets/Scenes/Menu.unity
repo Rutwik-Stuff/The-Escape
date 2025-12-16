@@ -1133,6 +1133,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 723138537}
     - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
+      propertyPath: logic
+      value: 
+      objectReference: {fileID: 665299914}
+    - target: {fileID: 8106082267006195076, guid: 0c5832f8a9a36a644bb034bb3f1d8ce9, type: 3}
       propertyPath: retry
       value: 
       objectReference: {fileID: 2040379377}
@@ -9311,6 +9315,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 659881567}
   m_CullTransparentMesh: 1
+--- !u!114 &665299914 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2112576505020569521, guid: 9d234d96c667ae345a87c2e18ef655f9, type: 3}
+  m_PrefabInstance: {fileID: 1965008064}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b2d94c185eb8714d81f2239486e03d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+--- !u!114 &665299915 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8799827781694257348, guid: 9d234d96c667ae345a87c2e18ef655f9, type: 3}
+  m_PrefabInstance: {fileID: 1965008064}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46a67f9aa79aad14e8ab706c66a452e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &670330727
 GameObject:
   m_ObjectHideFlags: 0
@@ -17519,7 +17545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1217701516
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18448,6 +18474,7 @@ MonoBehaviour:
   room2: {fileID: 681159293}
   room3: {fileID: 1397815674}
   w: {fileID: 796475160}
+  sv: {fileID: 665299915}
 --- !u!1 &1284102190
 GameObject:
   m_ObjectHideFlags: 0
@@ -18829,6 +18856,7 @@ MonoBehaviour:
   leftArrow: {fileID: 963941788}
   rightArrow: {fileID: 992428444}
   pageCount: {fileID: 1152922110}
+  sv: {fileID: 665299915}
   w: {fileID: 796475160}
   lastSelected: {fileID: 0}
 --- !u!1 &1299050059

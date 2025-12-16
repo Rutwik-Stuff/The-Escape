@@ -16,6 +16,7 @@ public class ServerRoomsController : MonoBehaviour
     public GameObject rightArrow;
 
     public TMP_Text pageCount;
+    public Saves sv;
 
     public WebSocketClient w;
 
@@ -50,6 +51,14 @@ public class ServerRoomsController : MonoBehaviour
     public void join(){
         checkSelected();
         if(lastSelected != null){
+            string id = sv.getIdMatchingUID(lastSelected.uid.text);
+            if(id == null){
+                //not my room
+                sv.setSaveID("R"+lastSelected.uid.text);
+            } else {
+                //my room
+                sv.setSaveID("R"+id);
+            }
             w.joinServerRoom(lastSelected.id);
         }
 

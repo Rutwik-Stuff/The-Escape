@@ -25,6 +25,7 @@ public class WebSocketClient : MonoBehaviour
     public ServerRoomsController s;
     public StatsController stc;
     public pwdInputController pic;
+    public MainLogic logic;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
@@ -115,6 +116,13 @@ public class WebSocketClient : MonoBehaviour
                     } else if(e.Data.StartsWith("30")){
                         UnityMainThreadDispatcher.Instance().Enqueue(() => {
                         f.showMessage(e.Data.Substring(2));
+                        });
+                    } else if(e.Data.StartsWith("31m")){
+                        UnityMainThreadDispatcher.Instance().Enqueue(() => {
+
+                            logic.launchSave(sv.getCurrentSaveId());
+                            Debug.Log("Launching room with id: "+sv.getCurrentSaveId());
+
                         });
                     }
                 break;
@@ -334,6 +342,7 @@ public class WebSocketClient : MonoBehaviour
     public void joinByAddress(string id, string pwd){
         ws.Send(joinRoomPwd(id, pwd));
     }
+
 }
 
 

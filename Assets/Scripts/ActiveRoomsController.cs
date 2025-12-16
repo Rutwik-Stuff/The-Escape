@@ -9,6 +9,7 @@ public class ActiveRoomsController : MonoBehaviour
     private ActiveRoomController lastSelected;
 
     public WebSocketClient w;
+    public Saves sv;
 
     public void roomClicked(int id){
         Debug.Log("Room Clicked "+ id);
@@ -31,7 +32,8 @@ public class ActiveRoomsController : MonoBehaviour
     public void join(){
         checkSelected();
         if(lastSelected != null){
-            w.joinMyRoom(lastSelected.id);        
+            w.joinMyRoom(lastSelected.id);
+            sv.setSaveID("R"+lastSelected.id);        
         }
     }
     public void stop(){
