@@ -3,6 +3,7 @@ using NativeWebSocket;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class WebSocketClient : MonoBehaviour
 {
@@ -62,6 +63,9 @@ void Awake()
             else
             {
                 Debug.Log("shutting down");
+                if(!(SceneManager.GetActiveScene().name == "Menu")){
+                    logic.exitMode();
+                }
                 closeMultiplayer();
                 openMultiplayer();
             }
