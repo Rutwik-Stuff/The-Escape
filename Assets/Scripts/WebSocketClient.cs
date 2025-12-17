@@ -30,6 +30,21 @@ public class WebSocketClient : MonoBehaviour
     bool gotResponse = false;
     string[] lastResponse = null;
 
+    private static WebSocketClient instance;
+
+void Awake()
+{
+    if (instance != null && instance != this)
+    {
+        Destroy(gameObject);
+        return;
+    }
+
+    instance = this;
+    DontDestroyOnLoad(gameObject);
+}
+
+
     IEnumerator PollServerLoop()
     {
         while (isConnected)
@@ -55,6 +70,7 @@ public class WebSocketClient : MonoBehaviour
 
     async void Start()
     {
+        Debug.Log("WS started");
         sv = FindObjectOfType<Saves>();
 
         ws = new WebSocket("ws://localhost:8080");
@@ -97,6 +113,7 @@ public class WebSocketClient : MonoBehaviour
                         f.showMessage(data.Substring(2));
                     else if (data.StartsWith("31m"))
                         logic.launchSave(sv.getCurrentSaveId());
+                        isMultiplayer = true;
                     break;
 
                 case '6':
@@ -163,13 +180,6 @@ public class WebSocketClient : MonoBehaviour
 #if UNITY_WEBGL
         ws?.DispatchMessageQueue();
 #endif
-
-        if (isMultiplayer && !isConnected && Time.time - connectStart > 10f)
-        {
-            Debug.Log("Timeout");
-            cwc.showRetry("Connection Timeout!");
-            closeMultiplayer();
-        }
     }
 
     async void OnDestroy()
