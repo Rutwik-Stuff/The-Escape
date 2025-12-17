@@ -2020,6 +2020,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   uid: {fileID: 0}
   id: 0
+  roomid: 0
   parent: {fileID: 0}
   w: {fileID: 0}
 --- !u!114 &147480713
@@ -2231,6 +2232,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   uid: {fileID: 0}
   id: 0
+  roomid: 0
   parent: {fileID: 0}
   w: {fileID: 0}
 --- !u!114 &151307897
@@ -9571,6 +9573,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   uid: {fileID: 0}
   id: 1
+  roomid: 0
   parent: {fileID: 1276002209}
   w: {fileID: 0}
 --- !u!114 &681159294
@@ -17470,6 +17473,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   uid: {fileID: 0}
   id: 0
+  roomid: 0
   parent: {fileID: 1276002209}
   w: {fileID: 0}
 --- !u!114 &1211780952
@@ -21128,6 +21132,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   uid: {fileID: 0}
   id: 2
+  roomid: 0
   parent: {fileID: 1276002209}
   w: {fileID: 0}
 --- !u!114 &1397815675
@@ -28904,6 +28909,7 @@ MonoBehaviour:
   playerCount: {fileID: 0}
   uid: {fileID: 0}
   id: 0
+  roomid: 0
   parent: {fileID: 0}
   w: {fileID: 0}
 --- !u!114 &1855271496
@@ -29935,6 +29941,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2112576505020569521, guid: 9d234d96c667ae345a87c2e18ef655f9, type: 3}
+      propertyPath: mpanel
+      value: 
+      objectReference: {fileID: 1217701515}
+    - target: {fileID: 2112576505020569521, guid: 9d234d96c667ae345a87c2e18ef655f9, type: 3}
+      propertyPath: spanel
+      value: 
+      objectReference: {fileID: 1497188096}
     - target: {fileID: 2798429100121529823, guid: 9d234d96c667ae345a87c2e18ef655f9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 855.8133

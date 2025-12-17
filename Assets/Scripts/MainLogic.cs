@@ -1,20 +1,26 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System.Linq;
+using System.Collections;
 
 public class MainLogic : MonoBehaviour
 {
     public GameObject skillPanel;
     private Dictionary<int, float[]> benches = new Dictionary<int, float[]>();
     public Movement mv;
+    public PausePanelController ppc;
+    public WebSocketClient ws;
+
 
     public Saves sv;
 
     private static MainLogic instance;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
-    {   
+    {   ppc = FindObjectOfType<PausePanelController>();
         sv = FindObjectOfType<Saves>();
+        ws = FindObjectOfType<WebSocketClient>();
         if (instance == null)
         {
             instance = this;
@@ -51,6 +57,9 @@ public class MainLogic : MonoBehaviour
         } else {
             skillPanel.SetActive(false);
         }*/
+        if(Input.GetKeyDown(KeyCode.Escape)){
+            pause();
+        }
         if(Input.GetKey(KeyCode.X)){
             sv.delete();
         }
@@ -60,6 +69,9 @@ public class MainLogic : MonoBehaviour
         if(!(scene.name == "Menu")){
             Debug.Log("new scene loaded");
             sv.LoadSceneSaves();
+            ppc = FindObjectOfType<PausePanelController>();
+            ws = FindObjectOfType<WebSocketClient>();
+            Time.timeScale = 1f;
         }
     }
     public void death(){
@@ -83,4 +95,40 @@ public class MainLogic : MonoBehaviour
             }
         }
     }
+    public void pause(){
+        Time.timeScale = 0f;
+        ppc.Activate();
+    }
+    public void unPause(){
+        Time.timeScale = 1f;
+    }
+    public void exitMode(){
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Menu");
+        if(ws.isMultiplayer){
+            StartCoroutine(mpanelOpen());
+            Debug.Log("Multiplayer open");
+        } else {
+            StartCoroutine(spanelOpen());
+            Debug.Log("SinglePlayer open");
+        }
+    }
+    IEnumerator mpanelOpen(){
+        yield return null;
+        yield return null;
+        Transform mpanel = Resources.FindObjectsOfTypeAll<Transform>()
+                            .FirstOrDefault(c => c.gameObject.name == "multiplayer");
+
+            mpanel.gameObject.SetActive(true);
+            ws.openMultiplayer();
+    }
+    IEnumerator spanelOpen(){
+        yield return null;
+        yield return null;
+        Transform spanel = Resources.FindObjectsOfTypeAll<Transform>()
+                            .FirstOrDefault(c => c.gameObject.name == "Singleplayer");
+
+            spanel.gameObject.SetActive(true);
+}
+    
 }

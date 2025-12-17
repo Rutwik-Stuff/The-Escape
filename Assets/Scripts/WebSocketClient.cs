@@ -1,23 +1,20 @@
-using WebSocketSharp;
 using UnityEngine;
-using System.Diagnostics;
-using System.Collections.Generic;
-using Debug = UnityEngine.Debug;
-using TMPro;
+using NativeWebSocket;
 using System.Collections;
-
-
+using System.Collections.Generic;
+using TMPro;
 
 public class WebSocketClient : MonoBehaviour
 {
     WebSocket ws;
+
     public string nickname = "rafa";
     public connectWindowController cwc;
 
     private bool isConnected = false;
-    bool isMultiplayer = false;
-    private Stopwatch sw;
+    public bool isMultiplayer = false;
     float connectStart;
+
     public Saves sv;
     public feedbackController f;
     public GameObject fpanel;
@@ -30,319 +27,218 @@ public class WebSocketClient : MonoBehaviour
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
 
-
-
     bool gotResponse = false;
     string[] lastResponse = null;
 
-    IEnumerator PollServerLoop() {
-        while (isConnected) {
+    IEnumerator PollServerLoop()
+    {
+        while (isConnected)
+        {
             lastResponse = null;
-            if(ws.ReadyState == WebSocketState.Open){
-                ws.Send("9");
-            } else {
-                Debug.Log("shutting down");
-                closeMultiplayer();
-                isConnected = false;
-                openMultiplayer();
-            }
-            
-            // wait for server to respond
-            yield return new WaitForSeconds(3f);
+            ws.SendText("9");
 
-            if (gotResponse && lastResponse != null) {
+            yield return new WaitForSecondsRealtime(3f);
+
+            if (gotResponse && lastResponse != null)
+            {
                 gotResponse = false;
-                UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                       stc.updateStats(lastResponse[2], lastResponse[1]);
-                    });
-                
-            } else {
+                stc.updateStats(lastResponse[2], lastResponse[1]);
+            }
+            else
+            {
                 Debug.Log("shutting down");
                 closeMultiplayer();
-                isConnected = false;
                 openMultiplayer();
             }
         }
     }
 
-
-    void Start()
+    async void Start()
     {
         sv = FindObjectOfType<Saves>();
-        sw = new Stopwatch();
-        ws = new WebSocket("ws://localhost:8080");
-       
 
-        ws.OnMessage += (sender, e) =>
+        ws = new WebSocket("ws://localhost:8080");
+
+        ws.OnMessage += (bytes) =>
         {
-            Debug.Log("Received"+e.Data);
-            switch(e.Data.Substring(0,1)){
-                case "0": 
-                Debug.Log("Room stopped");
-                refreshMyActiveRooms();
-                break;
-                case "1": if(e.Data == "11") {
-                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                        cwc.hide();
-                    });
-                    isConnected = true;
+            string data = System.Text.Encoding.UTF8.GetString(bytes);
+            Debug.Log("Received " + data);
+
+            switch (data[0])
+            {
+                case '0':
                     refreshMyActiveRooms();
-                }
-                break;
-                case "2":
-                    string msg = e.Data.Trim();
-                    string[] parts = msg.Split(':');
+                    break;
+
+                case '1':
+                    if (data == "11")
+                    {
+                        cwc.hide();
+                        isConnected = true;
+                        refreshMyActiveRooms();
+                    }
+                    break;
+
+                case '2':
+                    string[] parts = data.Split(':');
                     if (parts.Length >= 3 && parts[0] == "21")
-                        {
-                           UnityMainThreadDispatcher.Instance().Enqueue(() => {
                         sv.changeUID(parts[1], parts[2]);
-                    }); 
-                     
-                        } else {
-                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
+                    else
+                    {
                         fpanel.SetActive(true);
                         f.showMessage(parts[1]);
-                        });
-                }
-                break;
-
-                case "3": 
-                    if(e.Data.StartsWith("3p")){
-                        //ask user for password. 
-                        UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                    pic.showInputPassword(e.Data.Substring(2));
-                });
-                        
-                    } else if(e.Data.StartsWith("30")){
-                        UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                        f.showMessage(e.Data.Substring(2));
-                        });
-                    } else if(e.Data.StartsWith("31m")){
-                        UnityMainThreadDispatcher.Instance().Enqueue(() => {
-
-                            logic.launchSave(sv.getCurrentSaveId());
-                            Debug.Log("Launching room with id: "+sv.getCurrentSaveId());
-
-                        });
                     }
-                break;
-                case "4": break;
-                case "5": break;
-                case "6": 
-                    Debug.Log("Received server rooms");
-                    clearServerRoomList();
-                    if(e.Data.Contains(";")){
-                        string[] rooms = e.Data.Split(";");
-                        for(int i = 1; i < rooms.Length; i++){
-                            string[] parts2 = rooms[i].Split(":");
-                            addRoomToServerList(parts2[0], parts2[1], parts2[2], int.Parse(parts2[3]));
+                    break;
+
+                case '3':
+                    if (data.StartsWith("3p"))
+                        pic.showInputPassword(data.Substring(2));
+                    else if (data.StartsWith("30"))
+                        f.showMessage(data.Substring(2));
+                    else if (data.StartsWith("31m"))
+                        logic.launchSave(sv.getCurrentSaveId());
+                    break;
+
+                case '6':
+                    displayedServerRooms.Clear();
+                    if (data.Contains(";"))
+                    {
+                        string[] rooms = data.Split(';');
+                        for (int i = 1; i < rooms.Length; i++)
+                        {
+                            string[] p = rooms[i].Split(':');
+                            displayedServerRooms.Add(
+                                new Room(p[0], p[1], p[2], int.Parse(p[3]))
+                            );
                         }
                     }
-                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
                     s.refresh();
-                });
-                    
                     break;
 
-                case "7": 
+                case '7':
                     gotResponse = true;
-                    lastResponse = e.Data.Split(":");
+                    lastResponse = data.Split(':');
+                    break;
 
-                break;
-                case "8": 
-                    if(e.Data.Substring(0,2) == "81") {
-                        Debug.Log("Connection Successful!"+e.Data.Substring(2));
+                case '8':
+                    if (data.StartsWith("81"))
+                    {
                         isConnected = true;
-                        Debug.Log("debug");
-                        UnityMainThreadDispatcher.Instance().Enqueue(() =>
-{
-    StartCoroutine(PollServerLoop());
-});
-
-                     }
+                        StartCoroutine(PollServerLoop());
+                    }
                     break;
-                case "9":
-                    Debug.Log("received my rooms info");
-                    clearActiveRoomList();
-                    Debug.Log("roomlistsize"+displayedMyOnlineRooms.Count);
-                    if(e.Data.Contains(";")){
-                        string[] rooms = e.Data.Split(";");
-                        foreach(string part in rooms){
-                            Debug.Log("Part: '"+part+"'");
+
+                case '9':
+                    displayedMyOnlineRooms.Clear();
+                    if (data.Contains(";"))
+                    {
+                        string[] rooms = data.Split(';');
+                        for (int i = 1; i < rooms.Length; i++)
+                        {
+                            string[] p = rooms[i].Split(':');
+                            displayedMyOnlineRooms.Add(
+                                new Room(p[0], p[2], int.Parse(p[3]), p[1])
+                            );
                         }
-                    for(int i = 1; i < rooms.Length; i++){
-                        string[] parts1 = rooms[i].Split(":");
-                        Debug.Log("I"+i);
-                        addRoomToMyOnlineList(int.Parse(parts1[3]), parts1[0], parts1[2], parts1[1]);
-                        Debug.Log("I"+i); //count, name, id, pwd
-                        
                     }
-                    }
-                    UnityMainThreadDispatcher.Instance().Enqueue(() => {
                     r.refresh();
-                });
-
                     break;
             }
-            
-        };
-        ws.OnError += (sender, e) =>
-        {
-            Debug.Log("Encountered error!");
-            if(!isConnected) {
-                isConnected = true;
-                UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                    cwc.showRetry(e.Message);
-                });
-            } else {
-                Debug.Log("asdf");
-                UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                    fpanel.SetActive(true);
-                    f.showMessage(e.Message);
-                });
-                
-            }
-            
-        };
-        ws.OnOpen += (sender, e) =>
-        {
-            ws.Send(showName());
         };
 
+        ws.OnError += (e) =>
+        {
+            fpanel.SetActive(true);
+            f.showMessage(e);
+        };
+
+        ws.OnOpen += () =>
+        {
+            ws.SendText(showName());
+        };
     }
 
-    void OnDestroy()
+    void Update()
     {
-        if(ws.ReadyState == WebSocketState.Open){
-                ws.Close();
-            }
-    }
-    void Update(){
-        if(isMultiplayer){
-            if (!isConnected && Time.time - connectStart > 10f)
-        {
-            UnityMainThreadDispatcher.Instance().Enqueue(() => {
-                Debug.Log("Timeout");
-                cwc.showRetry("Connection Timeout!");
-            });
-            
-            ws.Close();
-        }
-        }
+#if UNITY_WEBGL
+        ws?.DispatchMessageQueue();
+#endif
 
+        if (isMultiplayer && !isConnected && Time.time - connectStart > 10f)
+        {
+            Debug.Log("Timeout");
+            cwc.showRetry("Connection Timeout!");
+            closeMultiplayer();
+        }
     }
-    public void launchRoom(string name, string password, string uid, string id){
-        ws.Send(createRoom(name, password, uid, id));
+
+    async void OnDestroy()
+    {
+        if (ws != null)
+            await ws.Close();
     }
-    public void openMultiplayer(){
+
+    public async void openMultiplayer()
+    {
         isConnected = false;
         isMultiplayer = true;
         connectStart = Time.time;
-        ws.ConnectAsync();
-        UnityMainThreadDispatcher.Instance().Enqueue(() => {
-            cwc.showConnecting();
-        });
-        
+        cwc.showConnecting();
+        await ws.Connect();
     }
-    public void stopActivRoom(int id){
-        ws.Send(stopMyRoom(displayedMyOnlineRooms[id].id));
-    }
-    public void closeMultiplayer(){
-       if(ws.ReadyState == WebSocketState.Open){
-                ws.Close();
-            }
+
+    public async void closeMultiplayer()
+    {
+        Debug.Log("closing multiplayer");
         isMultiplayer = false;
         isConnected = false;
-    }
-    public void refreshMyActiveRooms(){
-        ws.Send(getMyActiveRooms());
-    }
-    public void refreshServerRooms(){
-        ws.Send(getRooms(s.getPage()));
-    }
-    void clearActiveRoomList(){
-        displayedMyOnlineRooms.Clear();
-    }
-    void clearServerRoomList(){
-        displayedServerRooms.Clear();
-    }
-    void addRoomToMyOnlineList(int playerCount, string name, string id, string pwd){
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
-{
-    
-    displayedMyOnlineRooms.Add(new Room(name, id, playerCount, pwd));
-    Debug.Log("roomadd"); 
-});
-
-    }
-    void addRoomToServerList(string name, string host, string id, int playerCount){
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
-{
-    
-    displayedServerRooms.Add(new Room(name, host, id, playerCount));
-    Debug.Log("roomadd"); 
-    Debug.Log("Server rooms list size "+displayedServerRooms.Count);
-});
-    }
-    
-    private string createRoom(string name, string password, string uid, string id){ //both launches and edits room
-        return "2"+name+":"+password+":"+uid+":"+id;
-    }
-    private string joinRoom(string id){
-        return "3"+id;
-    }
-    private string joinRoomPwd(string id, string pwd){
-        return 3+id+":"+pwd;
-    }
-    private string leaveRoom(){
-        return "4";
-    }
-    private string sendCoords(float x, float y, float vx, float vy){
-        return "6"+x+":"+y+":"+vx+":"+vy+":"+nickname;
-    }
-    private string getRooms(int page){
-        return "0"+page;
-    }
-    private string showName(){
-        return "1"+nickname;
-    }
-    private string getMyActiveRooms(){
-        return "7";
-    }
-    private string stopMyRoom(string uid){
-        return "8"+uid;
-    }
-    public bool hasId(int id){
-        Debug.Log(displayedMyOnlineRooms.Count + " " + id);
-        if(displayedMyOnlineRooms.Count>id){
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public bool hasSId(int id){
-        if(displayedServerRooms.Count>id){
-            return true;
-        } else {
-            return false;
-        }
-    }
-    public Room getRoomFromMyRoomList(int id){
-        return displayedMyOnlineRooms[id];
-    }
-    public Room getRoomFromServerList(int id){
-        return displayedServerRooms[id];
-    }
-    public void joinMyRoom(int id){
-        ws.Send(joinRoom(sv.loadUID(id.ToString())));
-    }
-    public void joinServerRoom(int id){
-        ws.Send(joinRoom(displayedServerRooms[id].id));
-    }
-    public void joinByAddress(string id, string pwd){
-        ws.Send(joinRoomPwd(id, pwd));
+        if (ws != null)
+            await ws.Close();
     }
 
+    public void launchRoom(string name, string password, string uid, string id)
+    {
+        ws.SendText("2" + name + ":" + password + ":" + uid + ":" + id);
+    }
+
+    public void stopActivRoom(int id)
+    {
+        ws.SendText("8" + displayedMyOnlineRooms[id].id);
+    }
+
+    public void refreshMyActiveRooms()
+    {
+        ws.SendText("7");
+    }
+
+    public void refreshServerRooms()
+    {
+        ws.SendText("0" + s.getPage());
+    }
+
+    public bool hasId(int id) => id < displayedMyOnlineRooms.Count;
+    public bool hasSId(int id) => id < displayedServerRooms.Count;
+
+    public Room getRoomFromMyRoomList(int id) => displayedMyOnlineRooms[id];
+    public Room getRoomFromServerList(int id) => displayedServerRooms[id];
+
+    public void joinMyRoom(int id)
+    {
+        ws.SendText("3" + displayedMyOnlineRooms[id].id);
+    }
+
+    public void joinServerRoom(int id)
+    {
+        ws.SendText("3" + displayedServerRooms[id].id);
+    }
+
+    public void joinByAddress(string id, string pwd)
+    {
+        ws.SendText("3" + id + ":" + pwd);
+    }
+
+    string showName() => "1" + nickname;
 }
+
 
 

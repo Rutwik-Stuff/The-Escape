@@ -14,6 +14,8 @@ public class ActiveRoomController : MonoBehaviour, IDeselectHandler
 
     public int id;
 
+    public int roomid;
+
     public ActiveRoomsController parent;
 
     public WebSocketClient w;

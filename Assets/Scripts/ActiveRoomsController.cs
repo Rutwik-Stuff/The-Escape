@@ -32,9 +32,17 @@ public class ActiveRoomsController : MonoBehaviour
     public void join(){
         checkSelected();
         if(lastSelected != null){
+            string id = sv.getIdMatchingUID(lastSelected.uid.text);
+             if(id == null){
+                //not my room
+                sv.setSaveID("R"+lastSelected.uid.text);
+            } else {
+                //my room
+                sv.setSaveID("R"+id);
+            }
             w.joinMyRoom(lastSelected.id);
-            sv.setSaveID("R"+lastSelected.id);        
         }
+        
     }
     public void stop(){
         checkSelected();
