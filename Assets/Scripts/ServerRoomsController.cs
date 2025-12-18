@@ -90,5 +90,6 @@ public class ServerRoomsController : MonoBehaviour
     public void joinByAddress(){
         //join
         addressPanel.SetActive(false);
+        w.joinAddress(address.text);
     }
 }

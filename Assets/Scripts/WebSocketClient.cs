@@ -9,7 +9,7 @@ public class WebSocketClient : MonoBehaviour
 {
     WebSocket ws;
 
-    public string nickname = "rafa";
+    public string nickname = "";
     public connectWindowController cwc;
 
     private bool isConnected = false;
@@ -24,6 +24,10 @@ public class WebSocketClient : MonoBehaviour
     public StatsController stc;
     public pwdInputController pic;
     public MainLogic logic;
+    public GameObject nicknamepanel;
+
+    public TMP_Text nick;
+    public TMP_InputField nickInput;
 
     private List<Room> displayedServerRooms = new List<Room>();
     private List<Room> displayedMyOnlineRooms = new List<Room>();
@@ -198,9 +202,28 @@ void Awake()
         isMultiplayer = true;
         connectStart = Time.time;
         cwc.showConnecting();
+        if(sv.getNickname()==""){
+            nickname = "Player"+Random.Range(1, 10000000);
+            nick.text = nickname;
+            sv.saveNick(nickname);
+            Debug.Log("Generating Nickname");
+        } else {
+            Debug.Log("Setting Nickname");
+            nick.text = sv.getNickname();
+        }
         await ws.Connect();
-    }
 
+        
+    }
+    public void changeNick(){
+        nicknamepanel.SetActive(true);
+    }
+    public void onNickEdited(){
+        sv.saveNick(nickInput.text);
+        nick.text = nickInput.text;
+        nicknamepanel.SetActive(false);
+        ws.SendText(showName());
+    }
     public async void closeMultiplayer()
     {
         Debug.Log("closing multiplayer");
@@ -248,10 +271,12 @@ void Awake()
 
     public void joinByAddress(string id, string pwd)
     {
-        ws.SendText("3" + id + ":" + pwd);
+        ws.SendText("3" + id+":"+pwd);
     }
-
-    string showName() => "1" + nickname;
+    public void joinAddress(string id){
+        ws.SendText("3"+id);
+    }
+    string showName() => "1" +  sv.getNickname();
 }
 
 

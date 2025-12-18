@@ -289,5 +289,11 @@ public class Saves : MonoBehaviour
         }
         return null;
     }
+    public string getNickname(){
+        return PlayerPrefs.GetString("NICK", "");
+    }
+    public void saveNick(string nick){
+        PlayerPrefs.SetString("NICK", nick);
+    }
 }
 
