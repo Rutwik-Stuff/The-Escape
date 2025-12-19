@@ -45,8 +45,20 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1312666417
+    locked: 0
+  - name: Light
+    uniqueID: 1360382353
+    locked: 0
+  - name: character
+    uniqueID: 1992650083
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: New Layer 2
+    uniqueID: 879856055
     locked: 0
   m_RenderingLayers:
   - Default
