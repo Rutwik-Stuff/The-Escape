@@ -120,8 +120,7 @@ public class MainLogic : MonoBehaviour
                             .FirstOrDefault(c => c.gameObject.name == "multiplayer");
 
             mpanel.gameObject.SetActive(true);
-            ws.closeMultiplayer();
-            ws.openMultiplayer();
+            ws.reAssignFields();
     }
     IEnumerator spanelOpen(){
         yield return null;

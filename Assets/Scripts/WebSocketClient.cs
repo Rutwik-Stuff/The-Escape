@@ -30,7 +30,7 @@ public class WebSocketClient : MonoBehaviour
     public TMP_InputField nickInput;
 
     private List<Room> displayedServerRooms = new List<Room>();
-    private List<Room> displayedMyOnlineRooms = new List<Room>();
+    public List<Room> displayedMyOnlineRooms = new List<Room>();
 
     bool gotResponse = false;
     string[] lastResponse = null;
@@ -48,6 +48,17 @@ void Awake()
     instance = this;
     DontDestroyOnLoad(gameObject);
 }
+public void reAssignFields(){
+    cwc = FindObjectOfType<connectWindowController>(true);
+    f = FindObjectOfType<feedbackController>(true);
+    r = FindObjectOfType<ActiveRoomsController>(true);
+    s = FindObjectOfType<ServerRoomsController>(true);
+    stc = FindObjectOfType<StatsController>(true);
+    pic = FindObjectOfType<pwdInputController>(true);
+    GameObject o = GameObject.Find("Nick");
+    nick = o.GetComponent<TMP_Text>();
+    nick.text = sv.getNickname();
+}
 
 
     IEnumerator PollServerLoop()
@@ -62,16 +73,21 @@ void Awake()
             if (gotResponse && lastResponse != null)
             {
                 gotResponse = false;
-                stc.updateStats(lastResponse[2], lastResponse[1]);
+                if(stc != null){
+                    stc.updateStats(lastResponse[2], lastResponse[1]);
+                }
+                
             }
             else
             {
                 Debug.Log("shutting down");
                 if(!(SceneManager.GetActiveScene().name == "Menu")){
                     logic.exitMode();
-                }
-                closeMultiplayer();
+                } else {
+                    closeMultiplayer();
                 openMultiplayer();
+                }
+                
             }
         }
     }
@@ -109,7 +125,6 @@ void Awake()
                         sv.changeUID(parts[1], parts[2]);
                     else
                     {
-                        fpanel.SetActive(true);
                         f.showMessage(parts[1]);
                     }
                     break;
@@ -167,14 +182,19 @@ void Awake()
                         }
                     }
                     r.refresh();
+                    Debug.Log("List size"+ displayedMyOnlineRooms.Count);
                     break;
             }
         };
 
         ws.OnError += (e) =>
-        {
-            fpanel.SetActive(true);
-            f.showMessage(e);
+        {   if(SceneManager.GetActiveScene().name == "Menu"){
+            cwc.showRetry(e);
+        } else {
+            logic.exitMode();
+            cwc.showRetry(e);
+        }
+            
         };
 
         ws.OnOpen += () =>
@@ -240,11 +260,13 @@ void Awake()
 
     public void stopActivRoom(int id)
     {
+        Debug.Log(displayedMyOnlineRooms.Count);
         ws.SendText("8" + displayedMyOnlineRooms[id].id);
     }
 
     public void refreshMyActiveRooms()
     {
+        Debug.Log("Refreshing active rooms");
         ws.SendText("7");
     }
 

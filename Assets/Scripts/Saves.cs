@@ -33,7 +33,6 @@ public class Saves : MonoBehaviour
 
         // Rebuild wallBreaks first if needed (add known wall IDs here)
         InitializeWallBreaks();
-        PlayerPrefs.SetInt("R0LastBenchID", 1);
         // Load all saves
         Debug.Log("First Wall State Load");
         loadSaves();

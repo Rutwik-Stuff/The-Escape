@@ -37,7 +37,9 @@ public class ServerRoomsController : MonoBehaviour
         room4.showIfNeeded();
         room5.showIfNeeded();
     }
-
+    void Awake(){
+        w = FindObjectOfType<WebSocketClient>();
+    }
     public void checkSelected(){
         if(room0.isSelected()) lastSelected = room0;
         else if(room1.isSelected()) lastSelected = room1;

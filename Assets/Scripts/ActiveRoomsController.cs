@@ -28,6 +28,9 @@ public class ActiveRoomsController : MonoBehaviour
         else lastSelected = null;
 
     }
+    void Awake(){
+        w = FindObjectOfType<WebSocketClient>();
+    }
 
     public void join(){
         checkSelected();
