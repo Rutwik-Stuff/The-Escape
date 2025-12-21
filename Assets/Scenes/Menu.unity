@@ -2356,7 +2356,7 @@ GameObject:
   - component: {fileID: 151018692}
   - component: {fileID: 151018691}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: NickNameINPUT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28196,6 +28196,7 @@ GameObject:
   - component: {fileID: 1746617062}
   - component: {fileID: 1746617061}
   - component: {fileID: 1746617060}
+  - component: {fileID: 1746617063}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -28267,9 +28268,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 796475160}
-        m_TargetAssemblyTypeName: WebSocketClient, Assembly-CSharp
-        m_MethodName: onNickEdited
+      - m_Target: {fileID: 1746617063}
+        m_TargetAssemblyTypeName: NickNameEditButton, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -28317,6 +28318,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1746617058}
   m_CullTransparentMesh: 1
+--- !u!114 &1746617063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1746617058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cada6c9a4e7f8994ea48be3349f482e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  ws: {fileID: 0}
 --- !u!1 &1748600123
 GameObject:
   m_ObjectHideFlags: 0

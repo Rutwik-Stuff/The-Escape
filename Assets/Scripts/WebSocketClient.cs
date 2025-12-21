@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class WebSocketClient : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class WebSocketClient : MonoBehaviour
 
     private List<Room> displayedServerRooms = new List<Room>();
     public List<Room> displayedMyOnlineRooms = new List<Room>();
+    public List<string> CurrentRoomPlayerList = new List<string>();
 
     bool gotResponse = false;
     string[] lastResponse = null;
@@ -58,6 +60,12 @@ public void reAssignFields(){
     GameObject o = GameObject.Find("Nick");
     nick = o.GetComponent<TMP_Text>();
     nick.text = sv.getNickname();
+    Transform oo = Resources.FindObjectsOfTypeAll<Transform>()
+                            .FirstOrDefault(c => c.gameObject.name == "NicknameEdit");
+    nicknamepanel = oo.gameObject;
+    Transform ooo = Resources.FindObjectsOfTypeAll<Transform>()
+                            .FirstOrDefault(c => c.gameObject.name == "NickNameINPUT");
+    nickInput = ooo.gameObject.GetComponent<TMP_InputField>();
 }
 
 
@@ -66,7 +74,12 @@ public void reAssignFields(){
         while (isConnected)
         {
             lastResponse = null;
-            ws.SendText("9");
+            if(SceneManager.GetActiveScene().name == "Menu"){
+                ws.SendText("9"); //for servers stats
+            } else {
+                ws.SendText("91"); //for server stats + current room stats
+            }
+            
 
             yield return new WaitForSecondsRealtime(3f);
 
@@ -156,8 +169,18 @@ public void reAssignFields(){
                     break;
 
                 case '7':
+                    CurrentRoomPlayerList.Clear();
                     gotResponse = true;
-                    lastResponse = data.Split(':');
+                    lastResponse = data.Split(';');
+                    Debug.Log(lastResponse[0]);
+                    if(data.Contains(";")){
+                        string[] players = lastResponse[1].Split(":");
+                    for(int i = 0; i < players.Length; i++){
+                        CurrentRoomPlayerList.Add(players[i]);
+                    }
+                    }
+                    
+                    lastResponse = lastResponse[0].Split(':');
                     break;
 
                 case '8':

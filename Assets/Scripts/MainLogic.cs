@@ -11,6 +11,7 @@ public class MainLogic : MonoBehaviour
     public Movement mv;
     public PausePanelController ppc;
     public WebSocketClient ws;
+    public PlayerListController pl;
 
 
     public Saves sv;
@@ -51,15 +52,21 @@ public class MainLogic : MonoBehaviour
         keyCallbacks();
     }
     void keyCallbacks(){
-        /*
-        if(Input.GetKey(KeyCode.Tab)){
-            skillPanel.SetActive(true);
-        } else {
-            skillPanel.SetActive(false);
-        }*/
-        if(Input.GetKeyDown(KeyCode.Escape)){
-            pause();
+        if(SceneManager.GetActiveScene().name != "Menu"){
+            if(ws.isMultiplayer){
+                if(Input.GetKeyDown(KeyCode.Tab)){
+                pl.showPlayerTab();
+            }
+            if(Input.GetKeyUp(KeyCode.Tab)){
+                pl.hidePlayerTab();
+            }
+            }
+            
+            if(Input.GetKeyDown(KeyCode.Escape)){
+                pause();
+            }
         }
+        
         if(Input.GetKey(KeyCode.X)){
             sv.delete();
         }
@@ -71,6 +78,7 @@ public class MainLogic : MonoBehaviour
             sv.LoadSceneSaves();
             ppc = FindObjectOfType<PausePanelController>();
             ws = FindObjectOfType<WebSocketClient>();
+            pl = FindObjectOfType<PlayerListController>(true);
             Time.timeScale = 1f;
         }
     }
