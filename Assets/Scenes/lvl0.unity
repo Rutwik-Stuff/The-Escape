@@ -229,6 +229,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GetSkill
       objectReference: {fileID: 0}
+    - target: {fileID: 5439605619925719847, guid: 02a865bba595b6940bf4bd8514c60dba, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7973030426548643801, guid: 02a865bba595b6940bf4bd8514c60dba, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.23543
@@ -328,7 +332,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6163555319036861773, guid: e781725d81ae43147a71620cdd2114a3, type: 3}
       propertyPath: field of view
-      value: 60
+      value: 54
+      objectReference: {fileID: 0}
+    - target: {fileID: 6163555319036861773, guid: e781725d81ae43147a71620cdd2114a3, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6163555319036861773, guid: e781725d81ae43147a71620cdd2114a3, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6163555319036861773, guid: e781725d81ae43147a71620cdd2114a3, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6573516933562637040, guid: e781725d81ae43147a71620cdd2114a3, type: 3}
       propertyPath: m_Size.y
