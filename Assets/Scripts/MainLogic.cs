@@ -106,6 +106,7 @@ public class MainLogic : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
         if(ws.isMultiplayer){
+            ws.leaveRoom();
             StartCoroutine(mpanelOpen());
             Debug.Log("Multiplayer open");
         } else {

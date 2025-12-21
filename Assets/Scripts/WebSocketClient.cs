@@ -299,6 +299,9 @@ public void reAssignFields(){
         ws.SendText("3"+id);
     }
     string showName() => "1" +  sv.getNickname();
+    public void leaveRoom(){
+        ws.SendText("4");
+    }
 }
 
 

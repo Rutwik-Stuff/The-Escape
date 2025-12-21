@@ -28,6 +28,7 @@ public class Movement : MonoBehaviour, Savable
     public float startX = 0;
     public float startY = 0;
     public float hitImpulse = 5f;
+    public GameObject fire;
 
     private bool HitUnlocked;
     private bool AirJumpUnlocked;
@@ -53,6 +54,7 @@ public class Movement : MonoBehaviour, Savable
             if (Input.GetKey(KeyCode.Space)){
                 if(!isJumping) time = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
                     isJumping = true;
+                    fire.SetActive(true);
                     if(canAirJump) isExtraJump = false;
                     if(DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond-time<500){   
                         if((isOnWall && !isOnGround || wallJump) && WallJumpUnlocked){ 
@@ -172,6 +174,9 @@ public class Movement : MonoBehaviour, Savable
         }
         if(!isJumping && !isOnGround && !isOnWall && isExtraJump && AirJumpUnlocked){
             canAirJump = true;
+        }
+        if(!isJumping){
+            fire.SetActive(false);
         }
         if(Input.GetMouseButtonDown(1)){
             if(dashesLeft>0 && !isOnGround && DashUnlocked){
