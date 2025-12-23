@@ -16,6 +16,7 @@ public class WebSocketClient : MonoBehaviour
     private bool isConnected = false;
     public bool isMultiplayer = false;
     float connectStart;
+    float sendTime;
 
     public Saves sv;
     public feedbackController f;
@@ -26,6 +27,7 @@ public class WebSocketClient : MonoBehaviour
     public pwdInputController pic;
     public MainLogic logic;
     public GameObject nicknamepanel;
+    public Movement mv;
 
     public TMP_Text nick;
     public TMP_InputField nickInput;
@@ -110,7 +112,7 @@ public void reAssignFields(){
         Debug.Log("WS started");
         sv = FindObjectOfType<Saves>();
 
-        ws = new WebSocket("ws://localhost:8080");
+        ws = new WebSocket("ws://192.168.4.100:8080");
 
         ws.OnMessage += (bytes) =>
         {
@@ -151,7 +153,8 @@ public void reAssignFields(){
                         logic.launchSave(sv.getCurrentSaveId());
                         isMultiplayer = true;
                     break;
-
+                case '5':
+                break;
                 case '6':
                     displayedServerRooms.Clear();
                     if (data.Contains(";"))
@@ -174,9 +177,13 @@ public void reAssignFields(){
                     lastResponse = data.Split(';');
                     Debug.Log(lastResponse[0]);
                     if(data.Contains(";")){
+                        Debug.Log(lastResponse[1]);
                         string[] players = lastResponse[1].Split(":");
                     for(int i = 0; i < players.Length; i++){
-                        CurrentRoomPlayerList.Add(players[i]);
+                        if(players[i] != ""){
+                            CurrentRoomPlayerList.Add(players[i]);
+                        }
+                        
                     }
                     }
                     
@@ -228,9 +235,20 @@ public void reAssignFields(){
 
     void Update()
     {
+        if(Time.time*1000-sendTime>70 && isMultiplayer){
+            string name = SceneManager.GetActiveScene().name;
+            if(CurrentRoomPlayerList.Count > 1 && name != "Menu"){
+                mv = FindObjectOfType<Movement>();
+                ws.SendText("6"+":"+name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
+                Debug.Log(name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
+            }
+            sendTime = Time.time*1000;
+        }
+        
 #if UNITY_WEBGL
         ws?.DispatchMessageQueue();
 #endif
+
     }
 
     async void OnDestroy()

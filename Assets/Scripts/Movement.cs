@@ -14,6 +14,7 @@ public class Movement : MonoBehaviour, Savable
     public GameObject right;
     private bool isHitting;
     private static bool isRight;
+    private bool isDown;
     public bool isOnWall = false;
     private bool isExtraJump = false;
     private bool canAirJump = false;
@@ -29,6 +30,7 @@ public class Movement : MonoBehaviour, Savable
     public float startY = 0;
     public float hitImpulse = 5f;
     public GameObject fire;
+    public bool DashRegistered;
 
     private bool HitUnlocked;
     private bool AirJumpUnlocked;
@@ -100,6 +102,7 @@ public class Movement : MonoBehaviour, Savable
         if (Input.GetKey(KeyCode.D) && !disableRight){
         
             isRight = true;
+            isDown = false;
             var v = rb.linearVelocity;
             if(v.x <= walkVelocity){
                 v.x = walkVelocity;   
@@ -111,6 +114,7 @@ public class Movement : MonoBehaviour, Savable
                      if(!isHitting){
                         isHitting = true;
                         down.SetActive(true);
+                        isDown = true;
                     }
                 }
             }
@@ -118,6 +122,7 @@ public class Movement : MonoBehaviour, Savable
                 if(!isHitting){
                     isHitting = true;
                     right.SetActive(true);
+                    isDown = false;
                 }
             }
         } else if (Input.GetKey(KeyCode.A) && !disableLeft){
@@ -134,6 +139,7 @@ public class Movement : MonoBehaviour, Savable
                     if(!isHitting){
                         isHitting = true;
                         down.SetActive(true);
+                        isDown = true;
                     }
                 }
             }
@@ -141,11 +147,13 @@ public class Movement : MonoBehaviour, Savable
                 if(!isHitting){
                     left.SetActive(true);
                     isHitting = true;
+                    isDown = false;
                 }
             }
         } else if(Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.S) && HitUnlocked){
             if(!isHitting){
                 isHitting = true;
+                isDown = false;
                 if(isRight) right.SetActive(true);
                 else 
                 left.SetActive(true);
@@ -162,6 +170,7 @@ public class Movement : MonoBehaviour, Savable
                 if(Input.GetMouseButtonDown(0) && HitUnlocked){
                     if(!isHitting){
                         isHitting = true;
+                        isDown = true;
                         down.SetActive(true);
                     }
                 }
@@ -181,6 +190,7 @@ public class Movement : MonoBehaviour, Savable
         if(Input.GetMouseButtonDown(1)){
             if(dashesLeft>0 && !isOnGround && DashUnlocked){
                 dashesLeft--;
+                DashRegistered = true;
             if(isRight){
                 //Debug.Log("Dashing");
                 rb.AddForce(new Vector2(1,0)*15f, ForceMode2D.Impulse);
@@ -239,6 +249,34 @@ public class Movement : MonoBehaviour, Savable
         Debug.Log(WallJumpUnlocked);
         Debug.Log(DashUnlocked);
         
+    }
+    public float getX(){
+        return transform.position.x;
+    }
+    public float getY(){
+        return transform.position.y;
+    }
+    public string getHit(){
+        if(isHitting){
+            if(isRight){
+                return "r";
+            } else if (!isRight){
+                return "l";
+            } else if(isDown){
+                return "d";
+            } else {
+                return "0";
+            }
+        } else {
+            return "0";
+        }
+    }
+    public string isJump(){
+        if(isJumping){
+            return "1";
+        } else {
+            return "0";
+        }
     }
 
 }
