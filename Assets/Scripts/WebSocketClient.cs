@@ -77,9 +77,9 @@ public void reAssignFields(){
         {
             lastResponse = null;
             if(SceneManager.GetActiveScene().name == "Menu"){
-                ws.SendText("9"); //for servers stats
+                WebSocketClient.instance.ws.SendText("9"); //for servers stats
             } else {
-                ws.SendText("91"); //for server stats + current room stats
+                WebSocketClient.instance.ws.SendText("91"); //for server stats + current room stats
             }
             
 
@@ -112,7 +112,7 @@ public void reAssignFields(){
         Debug.Log("WS started");
         sv = FindObjectOfType<Saves>();
 
-        ws = new WebSocket("ws://192.168.4.100:8080");
+        WebSocketClient.instance.ws = new WebSocket("ws://192.168.4.100:8080");
 
         ws.OnMessage += (bytes) =>
         {
@@ -217,7 +217,7 @@ public void reAssignFields(){
             }
         };
 
-        ws.OnError += (e) =>
+        WebSocketClient.instance.ws.OnError += (e) =>
         {   if(SceneManager.GetActiveScene().name == "Menu"){
             cwc.showRetry(e);
         } else {
@@ -229,7 +229,7 @@ public void reAssignFields(){
 
         ws.OnOpen += () =>
         {
-            ws.SendText(showName());
+            WebSocketClient.instance.ws.SendText(showName());
         };
     }
 
@@ -239,21 +239,21 @@ public void reAssignFields(){
             string name = SceneManager.GetActiveScene().name;
             if(CurrentRoomPlayerList.Count > 1 && name != "Menu"){
                 mv = FindObjectOfType<Movement>();
-                ws.SendText("6"+":"+name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
+                WebSocketClient.instance.ws.SendText("6"+":"+name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
                 Debug.Log(name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
             }
             sendTime = Time.time*1000;
         }
         
 
-        ws?.DispatchMessageQueue();
+        WebSocketClient.instance.ws?.DispatchMessageQueue();
 
 
     }
 
     async void OnDestroy()
     {
-        if (ws != null)
+        if (WebSocketClient.instance.ws != null)
             await ws.Close();
     }
 
@@ -272,7 +272,7 @@ public void reAssignFields(){
             Debug.Log("Setting Nickname");
             nick.text = sv.getNickname();
         }
-        await ws.Connect();
+        await WebSocketClient.instance.ws.Connect();
 
         
     }
@@ -283,7 +283,7 @@ public void reAssignFields(){
         sv.saveNick(nickInput.text);
         nick.text = nickInput.text;
         nicknamepanel.SetActive(false);
-        ws.SendText(showName());
+        WebSocketClient.instance.ws.SendText(showName());
     }
     public async void closeMultiplayer()
     {
@@ -291,29 +291,29 @@ public void reAssignFields(){
         isMultiplayer = false;
         isConnected = false;
         if (ws != null)
-            await ws.Close();
+            await WebSocketClient.instance.ws.Close();
     }
 
     public void launchRoom(string name, string password, string uid, string id)
     {
-        ws.SendText("2" + name + ":" + password + ":" + uid + ":" + id);
+        WebSocketClient.instance.ws.SendText("2" + name + ":" + password + ":" + uid + ":" + id);
     }
 
     public void stopActivRoom(int id)
     {
         Debug.Log(displayedMyOnlineRooms.Count);
-        ws.SendText("8" + displayedMyOnlineRooms[id].id);
+        WebSocketClient.instance.ws.SendText("8" + displayedMyOnlineRooms[id].id);
     }
 
     public void refreshMyActiveRooms()
     {
         Debug.Log("Refreshing active rooms");
-        ws.SendText("7");
+        WebSocketClient.instance.ws.SendText("7");
     }
 
     public void refreshServerRooms()
     {
-        ws.SendText("0" + s.getPage());
+        WebSocketClient.instance.ws.SendText("0" + s.getPage());
     }
 
     public bool hasId(int id) => id < displayedMyOnlineRooms.Count;
@@ -324,25 +324,25 @@ public void reAssignFields(){
 
     public void joinMyRoom(int id)
     {
-        ws.SendText("3" + displayedMyOnlineRooms[id].id);
+        WebSocketClient.instance.ws.SendText("3" + displayedMyOnlineRooms[id].id);
     }
 
     public void joinServerRoom(int id)
     {
-        ws.SendText("3" + displayedServerRooms[id].id);
+        WebSocketClient.instance.ws.SendText("3" + displayedServerRooms[id].id);
     }
 
     public void joinByAddress(string id, string pwd)
     {
         if(ws ==  null) Debug.Log("Ws null");
-        ws.SendText("3" + id+":"+pwd);
+        WebSocketClient.instance.ws.SendText("3" + id+":"+pwd);
     }
     public void joinAddress(string id){
-        ws.SendText("3"+id);
+        WebSocketClient.instance.ws.SendText("3"+id);
     }
     string showName() => "1" +  sv.getNickname();
     public void leaveRoom(){
-        ws.SendText("4");
+        WebSocketClient.instance.ws.SendText("4");
     }
 }
 
