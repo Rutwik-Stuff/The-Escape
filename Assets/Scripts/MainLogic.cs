@@ -81,6 +81,7 @@ public class MainLogic : MonoBehaviour
             pl = FindObjectOfType<PlayerListController>(true);
             Time.timeScale = 1f;
         }
+        ws.OnSceneLoaded();
     }
     public void death(){
         Movement.startPosX = benches[sv.LastBenchID][0];

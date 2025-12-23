@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Linq;
-
+using System.Globalization;
 public class WebSocketClient : MonoBehaviour
 {
     WebSocket ws;
@@ -28,6 +28,7 @@ public class WebSocketClient : MonoBehaviour
     public MainLogic logic;
     public GameObject nicknamepanel;
     public Movement mv;
+    public testSpriteController tsc;
 
     public TMP_Text nick;
     public TMP_InputField nickInput;
@@ -154,6 +155,8 @@ public void reAssignFields(){
                         isMultiplayer = true;
                     break;
                 case '5':
+                string[] pieces = data.Split(":");
+                tsc.setCoords(float.Parse(pieces[3], CultureInfo.InvariantCulture), float.Parse(pieces[4], CultureInfo.InvariantCulture));
                 break;
                 case '6':
                     displayedServerRooms.Clear();
@@ -231,6 +234,11 @@ public void reAssignFields(){
         {
             WebSocketClient.instance.ws.SendText(showName());
         };
+    }
+    public void OnSceneLoaded(){
+        if(SceneManager.GetActiveScene().name != "Menu"){
+            tsc = FindObjectOfType<testSpriteController>();
+        }
     }
 
     void Update()
