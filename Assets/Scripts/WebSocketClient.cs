@@ -245,9 +245,9 @@ public void reAssignFields(){
             sendTime = Time.time*1000;
         }
         
-
+#if UNITY_WEBGL
         ws?.DispatchMessageQueue();
-
+#endif
 
     }
 
