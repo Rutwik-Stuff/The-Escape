@@ -231,6 +231,12 @@ public void reAssignFields(){
         {
             ws.SendText(showName());
         };
+        ws.OnClose += (WebSocketCloseCode code) =>{
+            if(isMultiplayer){
+                openMultiplayer();
+                cwc.showConnecting();
+            }
+        };
     }
 
     void Update()
