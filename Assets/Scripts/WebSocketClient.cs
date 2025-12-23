@@ -334,6 +334,7 @@ public void reAssignFields(){
 
     public void joinByAddress(string id, string pwd)
     {
+        if(ws ==  null) Debug.Log("Ws null");
         ws.SendText("3" + id+":"+pwd);
     }
     public void joinAddress(string id){
