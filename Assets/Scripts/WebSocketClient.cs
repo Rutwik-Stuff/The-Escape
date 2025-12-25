@@ -113,7 +113,7 @@ public void reAssignFields(){
         Debug.Log("WS started");
         sv = FindObjectOfType<Saves>();
 
-        WebSocketClient.instance.ws = new WebSocket("ws://192.168.4.100:8080");
+        WebSocketClient.instance.ws = new WebSocket("ws://192.168.10.23:8080");
 
         ws.OnMessage += (bytes) =>
         {
