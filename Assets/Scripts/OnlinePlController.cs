@@ -37,11 +37,6 @@ public class OnlinePlController : MonoBehaviour
             jumpAnim.SetActive(false);
         }
     }
-    public void stopAllAnims(){
-        leftAnim.SetActive(false);
-        rightAnim.SetActive(false);
-        downAnim.SetActive(false);
-    }
 
     public void processMovement(){
         Vector2 target = new Vector2(x, y);
