@@ -7,6 +7,7 @@ public class OnlinePlayersController : MonoBehaviour
    public Dictionary<string, OnlinePlController> players = new Dictionary<string, OnlinePlController>();
 
    public GameObject prefab;
+   public GameObject newInstance;
 
    public WebSocketClient ws;
 
@@ -22,7 +23,9 @@ public class OnlinePlayersController : MonoBehaviour
             player.toggleHitAnim(hcode);
             player.toggleJumpAnim(jcode);
         } else {
-            Instantiate(prefab, new Vector2(1, 1), Quaternion.identity);
+            Debug.Log("Instantiated");
+            newInstance = Instantiate(prefab, new Vector2(1, 1), Quaternion.identity);
+            players[nick] = newInstance.GetComponent<OnlinePlController>();
         }
     }
     void Update()
@@ -32,13 +35,14 @@ public class OnlinePlayersController : MonoBehaviour
         }
     }
     public void checkPlayerList(){
-        for(int i = 0; i < ws.CurrentRoomPlayerList.Count; i++){
-            if(players.ContainsKey(ws.CurrentRoomPlayerList[i])){
-                //good
-            } else {
-                //unnecessary player record
-                Destroy(players[ws.CurrentRoomPlayerList[i]]);
-                players.Remove(ws.CurrentRoomPlayerList[i]);
+        foreach(var pair in players){
+            bool match = false;
+            for(int i = 0; i < ws.CurrentRoomPlayerList.Count; i++){
+                if(ws.CurrentRoomPlayerList[i]==pair.Key) match = true;
+            }
+            if(!match && players.Count > ws.CurrentRoomPlayerList.Count){
+                Destroy(players[pair.Key].gameObject);
+                players.Remove(pair.Key);
             }
         }
     }
