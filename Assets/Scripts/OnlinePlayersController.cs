@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class OnlinePlayersController : MonoBehaviour
 {
@@ -30,20 +31,41 @@ public class OnlinePlayersController : MonoBehaviour
     }
     void Update()
     {
-        foreach(var pair in players){
+        if(SceneManager.GetActiveScene().name != "Menu"){
+            foreach(var pair in players){
             pair.Value.processMovement();
         }
+        }
+        
     }
     public void checkPlayerList(){
-        foreach(var pair in players){
-            bool match = false;
-            for(int i = 0; i < ws.CurrentRoomPlayerList.Count; i++){
-                if(ws.CurrentRoomPlayerList[i]==pair.Key) match = true;
-            }
-            if(!match && players.Count > ws.CurrentRoomPlayerList.Count){
-                Destroy(players[pair.Key].gameObject);
-                players.Remove(pair.Key);
+    List<string> toRemove = new List<string>();
+
+    foreach (var pair in players)
+    {
+        bool match = false;
+
+        for (int i = 0; i < ws.CurrentRoomPlayerList.Count; i++)
+        {
+            if (ws.CurrentRoomPlayerList[i] == pair.Key)
+            {
+                match = true;
+                break;
             }
         }
+
+        if (!match)
+        {
+            toRemove.Add(pair.Key);
+        }
     }
+
+    foreach (string key in toRemove)
+    {
+        Destroy(players[key].gameObject);
+        players.Remove(key);
+        Debug.Log("Removed " + key);
+    }
+}
+
 }

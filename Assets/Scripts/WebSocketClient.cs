@@ -121,7 +121,7 @@ public void reAssignFields(){
         ws.OnMessage += (bytes) =>
         {
             string data = System.Text.Encoding.UTF8.GetString(bytes);
-            Debug.Log("Received " + data);
+            //Debug.Log("Received " + data);
 
             switch (data[0])
             {
@@ -252,7 +252,7 @@ public void reAssignFields(){
             if(CurrentRoomPlayerList.Count > 1 && name != "Menu"){
                 mv = FindObjectOfType<Movement>();
                 WebSocketClient.instance.ws.SendText("6"+":"+name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
-                Debug.Log(name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
+                //Debug.Log(name.Substring(3)+":"+mv.getX()+":"+mv.getY()+":"+mv.getHit()+":"+mv.isJump());
             }
             sendTime = Time.time*1000;
         }
