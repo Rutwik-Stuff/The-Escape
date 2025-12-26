@@ -115,7 +115,7 @@ public void reAssignFields(){
         sv = FindObjectOfType<Saves>();
         opc = FindObjectOfType<OnlinePlayersController>();
 
-        WebSocketClient.instance.ws = new WebSocket("ws://192.168.10.23:8080");
+        WebSocketClient.instance.ws = new WebSocket("ws://192.168.137.181:8080");
 
         ws.OnMessage += (bytes) =>
         {
