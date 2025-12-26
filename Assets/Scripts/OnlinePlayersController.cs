@@ -39,7 +39,6 @@ public class OnlinePlayersController : MonoBehaviour
         
     }
     public void checkPlayerList(){
-        if(players.Count>1){
 List<string> toRemove = new List<string>();
 
     foreach (var pair in players)
@@ -67,7 +66,6 @@ List<string> toRemove = new List<string>();
         players.Remove(key);
         Debug.Log("Removed " + key);
     }
-}
         }
     public void clearPlayers(){
         players.Clear();
