@@ -247,7 +247,7 @@ public void reAssignFields(){
 
     void Update()
     {
-        if(Time.time*1000-sendTime>70 && isMultiplayer){
+        if(Time.time*1000-sendTime>50 && isMultiplayer){
             string name = SceneManager.GetActiveScene().name;
             if(CurrentRoomPlayerList.Count > 1 && name != "Menu"){
                 mv = FindObjectOfType<Movement>();
