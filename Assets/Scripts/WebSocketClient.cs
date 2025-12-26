@@ -85,7 +85,7 @@ public void reAssignFields(){
             }
             
 
-            yield return new WaitForSecondsRealtime(3f);
+            yield return new WaitForSecondsRealtime(5f);
 
             if (gotResponse && lastResponse != null)
             {

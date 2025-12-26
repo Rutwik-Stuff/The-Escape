@@ -285,7 +285,7 @@ SpriteRenderer:
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
-  m_FlipY: 0
+  m_FlipY: 1
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
@@ -309,7 +309,7 @@ MonoBehaviour:
   rightAnim: {fileID: 178938010551313150}
   downAnim: {fileID: 3357209756896726607}
   jumpAnim: {fileID: 4828797095530947361}
-  speed: 1
+  speed: 6
 --- !u!1 &3357209756896726607
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,7 +487,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2913394932939171823
 Transform:
   m_ObjectHideFlags: 0
