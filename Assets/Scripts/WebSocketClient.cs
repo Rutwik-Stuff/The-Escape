@@ -100,6 +100,7 @@ public void reAssignFields(){
                 Debug.Log("shutting down");
                 if(!(SceneManager.GetActiveScene().name == "Menu")){
                     logic.exitMode();
+                    Debug.Log("Exiting");
                 } else {
                     closeMultiplayer();
                 openMultiplayer();

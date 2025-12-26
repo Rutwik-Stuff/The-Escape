@@ -8,7 +8,7 @@ public class OnlinePlController : MonoBehaviour
 
     public GameObject jumpAnim;
 
-    public float speed = 1f;
+    public float speed = 5f;
 
     private float x;
     private float y;
