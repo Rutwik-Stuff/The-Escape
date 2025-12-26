@@ -15,8 +15,9 @@ public class OnlinePlayersController : MonoBehaviour
     }
     
     public void processStatus(float x, float y, string nick, string scene, string jcode, string hcode){
-        OnlinePlController player = players[nick];
-        if(player!=null){
+        OnlinePlController player;
+        if(players.ContainsKey(nick)){
+            player = players[nick];
             player.setCoords(x, y);
             player.toggleHitAnim(hcode);
             player.toggleJumpAnim(jcode);
