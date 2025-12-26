@@ -29,6 +29,7 @@ public class WebSocketClient : MonoBehaviour
     public GameObject nicknamepanel;
     public Movement mv;
     public testSpriteController tsc;
+    public OnlinePlayersController opc;
 
     public TMP_Text nick;
     public TMP_InputField nickInput;
@@ -112,8 +113,9 @@ public void reAssignFields(){
     {
         Debug.Log("WS started");
         sv = FindObjectOfType<Saves>();
+        opc = FindObjectOfType<OnlinePlayersController>();
 
-        WebSocketClient.instance.ws = new WebSocket("ws://192.168.137.1:8080");
+        WebSocketClient.instance.ws = new WebSocket("ws://192.168.10.23:8080");
 
         ws.OnMessage += (bytes) =>
         {
@@ -156,7 +158,7 @@ public void reAssignFields(){
                     break;
                 case '5':
                 string[] pieces = data.Split(":");
-                tsc.setCoords(float.Parse(pieces[3], CultureInfo.InvariantCulture), float.Parse(pieces[4], CultureInfo.InvariantCulture));
+                opc.processStatus(float.Parse(pieces[3]), float.Parse(pieces[4]), pieces[2], pieces[1], pieces[6], pieces[5]);
                 break;
                 case '6':
                     displayedServerRooms.Clear();
@@ -191,6 +193,7 @@ public void reAssignFields(){
                     }
                     
                     lastResponse = lastResponse[0].Split(':');
+                    opc.checkPlayerList();
                     break;
 
                 case '8':
