@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2243380107030340530}
   - component: {fileID: 1740006558536761686}
   - component: {fileID: 8318157376319885536}
+  - component: {fileID: 726195862796275715}
   m_Layer: 0
   m_Name: hitright
   m_TagString: Hit
@@ -113,6 +114,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &726195862796275715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178938010551313150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa04b94afbf27c54892831573a65f05b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimStopper
 --- !u!1 &533686343749186559
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,6 +335,7 @@ GameObject:
   - component: {fileID: 8423046312919625563}
   - component: {fileID: 1788593424475461181}
   - component: {fileID: 1197815347792448969}
+  - component: {fileID: 6966859079031217983}
   m_Layer: 0
   m_Name: hitdown
   m_TagString: Hit
@@ -470,6 +484,18 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &6966859079031217983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3357209756896726607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa04b94afbf27c54892831573a65f05b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &4828797095530947361
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,6 +705,7 @@ GameObject:
   - component: {fileID: 7764097116328691147}
   - component: {fileID: 3304258968190105267}
   - component: {fileID: 5449344579627508960}
+  - component: {fileID: 4287075775395795862}
   m_Layer: 0
   m_Name: hitleft
   m_TagString: Hit
@@ -781,3 +808,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4287075775395795862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7860926144764066127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa04b94afbf27c54892831573a65f05b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimStopper
