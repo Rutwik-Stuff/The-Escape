@@ -12,6 +12,7 @@ public class MainLogic : MonoBehaviour
     public PausePanelController ppc;
     public WebSocketClient ws;
     public PlayerListController pl;
+    public OnlinePlayersController opc;
 
 
     public Saves sv;
@@ -22,6 +23,7 @@ public class MainLogic : MonoBehaviour
     {   ppc = FindObjectOfType<PausePanelController>();
         sv = FindObjectOfType<Saves>();
         ws = FindObjectOfType<WebSocketClient>();
+        opc = FindObjectOfType<OnlinePlayersController>();
         if (instance == null)
         {
             instance = this;
@@ -115,6 +117,7 @@ public class MainLogic : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
         if(ws.isMultiplayer){
+            ws.canPing = false;
             ws.leaveRoom();
             StartCoroutine(mpanelOpen());
             Debug.Log("Multiplayer open");
@@ -131,6 +134,7 @@ public class MainLogic : MonoBehaviour
 
             mpanel.gameObject.SetActive(true);
             ws.reAssignFields();
+            opc.clearPlayers();
     }
     IEnumerator spanelOpen(){
         yield return null;

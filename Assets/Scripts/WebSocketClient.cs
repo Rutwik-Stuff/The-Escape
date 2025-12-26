@@ -34,6 +34,8 @@ public class WebSocketClient : MonoBehaviour
     public TMP_Text nick;
     public TMP_InputField nickInput;
 
+    public bool canPing = true;
+
     private List<Room> displayedServerRooms = new List<Room>();
     public List<Room> displayedMyOnlineRooms = new List<Room>();
     public List<string> CurrentRoomPlayerList = new List<string>();
@@ -77,12 +79,16 @@ public void reAssignFields(){
     {
         while (isConnected)
         {
+        
             lastResponse = null;
-            if(SceneManager.GetActiveScene().name == "Menu"){
+            if(canPing){
+                if(SceneManager.GetActiveScene().name == "Menu"){
                 WebSocketClient.instance.ws.SendText("9"); //for servers stats
             } else {
                 WebSocketClient.instance.ws.SendText("91"); //for server stats + current room stats
             }
+            }
+            
             
 
             yield return new WaitForSecondsRealtime(5f);
@@ -95,7 +101,7 @@ public void reAssignFields(){
                 }
                 
             }
-            else
+            else if(canPing)
             {
                 Debug.Log("shutting down");
                 if(!(SceneManager.GetActiveScene().name == "Menu")){
@@ -107,6 +113,7 @@ public void reAssignFields(){
                 }
                 
             }
+            if(!canPing) canPing = true;
         }
     }
 
@@ -225,7 +232,9 @@ public void reAssignFields(){
         };
 
         WebSocketClient.instance.ws.OnError += (e) =>
-        {   if(SceneManager.GetActiveScene().name == "Menu"){
+        {   
+            Debug.Log("Error happened");
+            if(SceneManager.GetActiveScene().name == "Menu"){
             cwc.showRetry(e);
         } else {
             logic.exitMode();
@@ -240,9 +249,7 @@ public void reAssignFields(){
         };
     }
     public void OnSceneLoaded(){
-        if(SceneManager.GetActiveScene().name != "Menu"){
-            tsc = FindObjectOfType<testSpriteController>();
-        }
+        
     }
 
     void Update()
@@ -266,7 +273,7 @@ public void reAssignFields(){
     async void OnDestroy()
     {
         if (WebSocketClient.instance.ws != null)
-            await ws.Close();
+            await WebSocketClient.instance.ws.Close();
     }
 
     public async void openMultiplayer()
