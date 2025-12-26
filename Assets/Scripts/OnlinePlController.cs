@@ -31,7 +31,7 @@ public class OnlinePlController : MonoBehaviour
         }
     }
     public void toggleJumpAnim(string code){
-        if(code == "j"){
+        if(code == "1"){
             jumpAnim.SetActive(true);
         } else {
             jumpAnim.SetActive(false);
