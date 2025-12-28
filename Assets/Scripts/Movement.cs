@@ -31,6 +31,7 @@ public class Movement : MonoBehaviour, Savable
     public float hitImpulse = 5f;
     public GameObject fire;
     public bool DashRegistered;
+    bool wasHit = false;
 
     private bool HitUnlocked;
     private bool AirJumpUnlocked;
@@ -115,6 +116,7 @@ public class Movement : MonoBehaviour, Savable
                         isHitting = true;
                         down.SetActive(true);
                         isDown = true;
+                        wasHit = true;
                     }
                 }
             }
@@ -123,6 +125,7 @@ public class Movement : MonoBehaviour, Savable
                     isHitting = true;
                     right.SetActive(true);
                     isDown = false;
+                    wasHit = true;
                 }
             }
         } else if (Input.GetKey(KeyCode.A) && !disableLeft){
@@ -140,6 +143,7 @@ public class Movement : MonoBehaviour, Savable
                         isHitting = true;
                         down.SetActive(true);
                         isDown = true;
+                        wasHit = true;
                     }
                 }
             }
@@ -148,12 +152,14 @@ public class Movement : MonoBehaviour, Savable
                     left.SetActive(true);
                     isHitting = true;
                     isDown = false;
+                    wasHit = true;
                 }
             }
         } else if(Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.S) && HitUnlocked){
             if(!isHitting){
                 isHitting = true;
                 isDown = false;
+                wasHit = true;
                 if(isRight) right.SetActive(true);
                 else 
                 left.SetActive(true);
@@ -171,6 +177,7 @@ public class Movement : MonoBehaviour, Savable
                     if(!isHitting){
                         isHitting = true;
                         isDown = true;
+                        wasHit = true;
                         down.SetActive(true);
                     }
                 }
@@ -257,7 +264,7 @@ public class Movement : MonoBehaviour, Savable
         return transform.position.y;
     }
     public string getHit(){
-        if(isHitting){
+        if(isHitting && wasHit){
             if(isRight){
                 return "r";
             } else if (!isRight){
@@ -270,6 +277,7 @@ public class Movement : MonoBehaviour, Savable
         } else {
             return "0";
         }
+        wasHit = false;
     }
     public string isJump(){
         if(isJumping){
