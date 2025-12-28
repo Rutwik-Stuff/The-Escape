@@ -24,11 +24,14 @@ public class OnlinePlController : MonoBehaviour
     public void toggleHitAnim(string code){
         if(code=="l"){
             leftAnim.SetActive(true);
+            Debug.Log("Hit from player");
         } else if(code == "r"){
             rightAnim.SetActive(true);
+            Debug.Log("Hit from player");
         } else if(code == "d"){
             downAnim.SetActive(true);
-        }
+            Debug.Log("Hit from player");
+        } 
     }
     public void toggleJumpAnim(string code){
         if(code == "1"){

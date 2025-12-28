@@ -265,19 +265,25 @@ public class Movement : MonoBehaviour, Savable
     }
     public string getHit(){
         if(isHitting && wasHit){
+            Debug.Log("hit send");
             if(isRight){
+                wasHit = false;
                 return "r";
             } else if (!isRight){
+                wasHit = false;
                 return "l";
             } else if(isDown){
+                wasHit = false;
                 return "d";
             } else {
+                wasHit = false;
                 return "0";
             }
+            
         } else {
             return "0";
         }
-        wasHit = false;
+        
     }
     public string isJump(){
         if(isJumping){
