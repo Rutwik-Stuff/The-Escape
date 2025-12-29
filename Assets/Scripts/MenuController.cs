@@ -4,6 +4,7 @@ public class MenuController : MonoBehaviour
 {
     public GameObject singlePlayerPanel;
     public GameObject multiplayerPanel;
+    public GameObject SettingsPanel;
 
     public void enableSinglePlayerPanel() {
         singlePlayerPanel.SetActive(true);
