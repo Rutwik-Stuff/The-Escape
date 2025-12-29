@@ -17,7 +17,8 @@ public class OnlinePlayersController : MonoBehaviour
     }
     
     public void processStatus(float x, float y, string nick, string scene, string jcode, string hcode){
-        OnlinePlController player;
+        if(scene = SceneManager.GetActiveScene().name.Substring(3)){
+            OnlinePlController player;
         if(players.ContainsKey(nick)){
             player = players[nick];
             player.setCoords(x, y);
@@ -28,6 +29,8 @@ public class OnlinePlayersController : MonoBehaviour
             newInstance = Instantiate(prefab, new Vector2(1, 1), Quaternion.identity);
             players[nick] = newInstance.GetComponent<OnlinePlController>();
         }
+        }
+        
     }
     void Update()
     {

@@ -78,6 +78,7 @@ public class MainLogic : MonoBehaviour
         if(!(scene.name == "Menu")){
             Debug.Log("new scene loaded");
             sv.LoadSceneSaves();
+            opc.players.Clear(); //clear player cache
             ppc = FindObjectOfType<PausePanelController>();
             ws = FindObjectOfType<WebSocketClient>();
             pl = FindObjectOfType<PlayerListController>(true);
