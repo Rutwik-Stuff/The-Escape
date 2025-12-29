@@ -17,7 +17,7 @@ public class OnlinePlayersController : MonoBehaviour
     }
     
     public void processStatus(float x, float y, string nick, string scene, string jcode, string hcode){
-        if(scene = SceneManager.GetActiveScene().name.Substring(3)){
+        if(scene == SceneManager.GetActiveScene().name.Substring(3)){
             OnlinePlController player;
         if(players.ContainsKey(nick)){
             player = players[nick];
