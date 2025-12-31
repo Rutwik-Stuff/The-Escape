@@ -19,4 +19,10 @@ public class MenuController : MonoBehaviour
         FindObjectOfType<WebSocketClient>().closeMultiplayer();
         multiplayerPanel.SetActive(false);
     }
+    public void enableSettingsPanel(){
+        SettingsPanel.SetActive(true);
+    }
+    public void disableSettingsPanel(){
+        SettingsPanel.SetActive(false);
+    }
 }
