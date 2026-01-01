@@ -3,9 +3,12 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 public class MainLogic : MonoBehaviour
 {
+    UniversalRenderPipelineAsset urpAsset;
     public GameObject skillPanel;
     private Dictionary<int, float[]> benches = new Dictionary<int, float[]>();
     public Movement mv;
@@ -35,6 +38,9 @@ public class MainLogic : MonoBehaviour
         }
         mv = FindObjectOfType<Movement>();
         fillBenches();
+        urpAsset = GraphicsSettings.defaultRenderPipeline as UniversalRenderPipelineAsset;
+        applyGlobalGSettings();
+
     }
     private void OnEnable()
     {
@@ -83,6 +89,15 @@ public class MainLogic : MonoBehaviour
             ws = FindObjectOfType<WebSocketClient>();
             pl = FindObjectOfType<PlayerListController>(true);
             Time.timeScale = 1f;
+            Volume volume = FindObjectOfType<Volume>();
+            if(volume != null)
+            {
+                if(sv.getPPS()==1) volume.enabled = true;
+            else 
+            volume.enabled = false;
+            }
+            
+
         }
         ws.OnSceneLoaded();
     }
@@ -145,5 +160,17 @@ public class MainLogic : MonoBehaviour
 
             spanel.gameObject.SetActive(true);
 }
+    public void applyGlobalGSettings()
+    {
+       StartCoroutine(applyingChanges());
+    }
+    IEnumerator applyingChanges()
+    {
+        yield return new WaitForSeconds(1f);
+        Application.targetFrameRate = sv.getFPS();
+        QualitySettings.SetQualityLevel(sv.getQlvl()+1, true);
+        urpAsset.renderScale = (float)sv.getRScale()*0.15f+0.7f;
+        Debug.Log("Changes applied");
+    }
     
 }

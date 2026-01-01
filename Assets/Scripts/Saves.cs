@@ -294,5 +294,28 @@ public class Saves : MonoBehaviour
     public void saveNick(string nick){
         PlayerPrefs.SetString("NICK", nick);
     }
+    public void saveGraphicsSettings(int fps, int rscale, int qlevel, int ppstatus)
+    {
+        PlayerPrefs.SetInt("TFPS", fps);
+        PlayerPrefs.SetInt("RSCALE", rscale);
+        PlayerPrefs.SetInt("QLVL", qlevel);
+        PlayerPrefs.SetInt("PPS", ppstatus);
+    }
+    public int getFPS()
+    {
+        return PlayerPrefs.GetInt("TFPS", -1);
+    }
+    public int getRScale()
+    {
+        return PlayerPrefs.GetInt("RSCALE", 0);
+    }
+    public int getQlvl()
+    {
+        return PlayerPrefs.GetInt("QLVL", 0);
+    }
+    public int getPPS()
+    {
+        return PlayerPrefs.GetInt("PPS", 1);
+    }
 }
 

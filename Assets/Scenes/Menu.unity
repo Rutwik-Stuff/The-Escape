@@ -11530,13 +11530,25 @@ MonoBehaviour:
   m_FillRect: {fileID: 2056422010}
   m_HandleRect: {fileID: 588852693}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
-  m_Value: 0
+  m_MinValue: -1
+  m_MaxValue: 120
+  m_WholeNumbers: 1
+  m_Value: -1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 923074815}
+        m_TargetAssemblyTypeName: DisplaySettingsManager, Assembly-CSharp
+        m_MethodName: onFPSSliderChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &659881567
 GameObject:
   m_ObjectHideFlags: 0
@@ -13833,12 +13845,24 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1832708789}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
+  m_MaxValue: 2
+  m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 923074815}
+        m_TargetAssemblyTypeName: DisplaySettingsManager, Assembly-CSharp
+        m_MethodName: onQualityLevelSliderChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &791072538
 GameObject:
   m_ObjectHideFlags: 0
@@ -16413,6 +16437,7 @@ GameObject:
   - component: {fileID: 923074812}
   - component: {fileID: 923074814}
   - component: {fileID: 923074813}
+  - component: {fileID: 923074815}
   m_Layer: 5
   m_Name: DisplayPanel
   m_TagString: Untagged
@@ -16489,6 +16514,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 923074811}
   m_CullTransparentMesh: 1
+--- !u!114 &923074815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923074811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cccc1cd30e2fb04fb48ae889724f29d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  fpsSlider: {fileID: 644937451}
+  renderScaleSlider: {fileID: 1396255359}
+  qualityLevelSlider: {fileID: 789495028}
+  pptoggle: {fileID: 356486368}
+  qltext: {fileID: 1316558622}
+  fpstext: {fileID: 1426858394}
+  rstext: {fileID: 1118226514}
+  sv: {fileID: 0}
+  logic: {fileID: 0}
 --- !u!1 &926559266
 GameObject:
   m_ObjectHideFlags: 0
@@ -19216,7 +19262,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1043294396
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27151,12 +27197,24 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1589252313}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
-  m_WholeNumbers: 0
+  m_MaxValue: 2
+  m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 923074815}
+        m_TargetAssemblyTypeName: DisplaySettingsManager, Assembly-CSharp
+        m_MethodName: onRenderScaleSliderChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1397815670
 GameObject:
   m_ObjectHideFlags: 0
@@ -27597,7 +27655,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1420632377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29985,7 +30043,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 164341502}
         m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
         m_MethodName: enableMultiplayerPanel
         m_Mode: 1
@@ -31297,6 +31355,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 923074815}
+        m_TargetAssemblyTypeName: DisplaySettingsManager, Assembly-CSharp
+        m_MethodName: loadSaves
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1587496330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31495,6 +31565,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1043294399}
         m_TargetAssemblyTypeName: InSettingsUIController, Assembly-CSharp
         m_MethodName: closeAllInSettingsPanels
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 923074815}
+        m_TargetAssemblyTypeName: DisplaySettingsManager, Assembly-CSharp
+        m_MethodName: SaveChanges
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
