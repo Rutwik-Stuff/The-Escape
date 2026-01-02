@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
+using System;
 
 public class MainLogic : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class MainLogic : MonoBehaviour
     public WebSocketClient ws;
     public PlayerListController pl;
     public OnlinePlayersController opc;
+
+    private KeyCode pausek;
+    private KeyCode playersk;
 
 
     public Saves sv;
@@ -40,6 +44,7 @@ public class MainLogic : MonoBehaviour
         fillBenches();
         urpAsset = GraphicsSettings.defaultRenderPipeline as UniversalRenderPipelineAsset;
         applyGlobalGSettings();
+        refreshKeyBinds();
 
     }
     private void OnEnable()
@@ -54,6 +59,11 @@ public class MainLogic : MonoBehaviour
         benches[0] = new float[]{0, -2.4f, 0};
         benches[1] = new float[]{3, 3.5f, 4}; //x y lvl
     }
+    public void refreshKeyBinds()
+    {
+        pausek = (KeyCode)Enum.Parse(typeof(KeyCode),sv.getKeyBind("PAUSEKEY"));
+        playersk = (KeyCode)Enum.Parse(typeof(KeyCode),sv.getKeyBind("PLAYERSKEY"));
+    }
     
     void Update()
     {
@@ -62,22 +72,22 @@ public class MainLogic : MonoBehaviour
     void keyCallbacks(){
         if(SceneManager.GetActiveScene().name != "Menu"){
             if(ws.isMultiplayer){
-                if(Input.GetKeyDown(KeyCode.Tab)){
+                if(Input.GetKeyDown(playersk)){
                 pl.showPlayerTab();
             }
-            if(Input.GetKeyUp(KeyCode.Tab)){
+            if(Input.GetKeyUp(playersk)){
                 pl.hidePlayerTab();
             }
             }
             
-            if(Input.GetKeyDown(KeyCode.Escape)){
+            if(Input.GetKeyDown(pausek)){
                 pause();
             }
         }
         
-        if(Input.GetKey(KeyCode.X)){
-            sv.delete();
-        }
+        //if(Input.GetKey(KeyCode.X)){
+        //    sv.delete();
+        //}
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -88,6 +98,7 @@ public class MainLogic : MonoBehaviour
             ppc = FindObjectOfType<PausePanelController>();
             ws = FindObjectOfType<WebSocketClient>();
             pl = FindObjectOfType<PlayerListController>(true);
+            mv = FindObjectOfType<Movement>();
             Time.timeScale = 1f;
             Volume volume = FindObjectOfType<Volume>();
             if(volume != null)
@@ -96,7 +107,7 @@ public class MainLogic : MonoBehaviour
             else 
             volume.enabled = false;
             }
-            
+            mv.refreshKeyBinds();
 
         }
         ws.OnSceneLoaded();

@@ -20,7 +20,7 @@ public class InSettingsUIController : MonoBehaviour
     }
     
     public void enableOtherPanel(){
-        displayPanel.SetActive(true);
+        otherPanel.SetActive(true);
     }
     
     public void closeAllInSettingsPanels(){

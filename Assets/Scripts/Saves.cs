@@ -317,5 +317,21 @@ public class Saves : MonoBehaviour
     {
         return PlayerPrefs.GetInt("PPS", 1);
     }
+    public void saveKeyBind(string name, string keycode)
+    {
+        PlayerPrefs.SetString(name, keycode);
+    }
+    public string getKeyBind(string name)
+    {
+        return PlayerPrefs.GetString(name, "-");
+    }
+    public void saveServerAddress(string addr)
+    {
+        PlayerPrefs.SetString("ADDR", addr);
+    }
+    public string getServerAddress()
+    {
+        return PlayerPrefs.GetString("ADDR", "ws://localhost:8080");
+    }
 }
 

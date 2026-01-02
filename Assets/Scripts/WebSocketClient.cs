@@ -117,18 +117,15 @@ public void reAssignFields(){
         }
     }
 
-    async void Start()
+    public void createWs()
     {
-        Debug.Log("WS started");
-        sv = FindObjectOfType<Saves>();
-        opc = FindObjectOfType<OnlinePlayersController>();
+        Debug.Log(sv.getServerAddress());
+        WebSocketClient.instance.ws = new WebSocket(sv.getServerAddress());
 
-        WebSocketClient.instance.ws = new WebSocket("ws://192.168.137.181:8080");
-
-        ws.OnMessage += (bytes) =>
+        WebSocketClient.instance.ws.OnMessage += (bytes) =>
         {
             string data = System.Text.Encoding.UTF8.GetString(bytes);
-            //Debug.Log("Received " + data);
+            Debug.Log("Received " + data);
 
             switch (data[0])
             {
@@ -243,10 +240,16 @@ public void reAssignFields(){
             
         };
 
-        ws.OnOpen += () =>
+        WebSocketClient.instance.ws.OnOpen += () =>
         {
             WebSocketClient.instance.ws.SendText(showName());
         };
+    }
+    void Start()
+    {
+        Debug.Log("WS started");
+        sv = FindObjectOfType<Saves>();
+        opc = FindObjectOfType<OnlinePlayersController>();
     }
     public void OnSceneLoaded(){
         
@@ -278,6 +281,7 @@ public void reAssignFields(){
 
     public async void openMultiplayer()
     {
+        createWs();
         isConnected = false;
         isMultiplayer = true;
         connectStart = Time.time;

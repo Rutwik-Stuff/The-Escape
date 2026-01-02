@@ -33,6 +33,15 @@ public class Movement : MonoBehaviour, Savable
     public bool DashRegistered;
     bool wasHit = false;
 
+    //----------Key Codes ---------------
+    private static KeyCode downk;
+    private static KeyCode leftk;
+    private static KeyCode rightk;
+    private static KeyCode jumpk;
+    private static KeyCode dashk;
+    private static KeyCode hitk;
+    //-----------------------------------
+
     private bool HitUnlocked;
     private bool AirJumpUnlocked;
     private bool DashUnlocked;
@@ -54,7 +63,7 @@ public class Movement : MonoBehaviour, Savable
     void Update()
     {
         if(isOnGround || isJumping || isOnWall || canAirJump){
-            if (Input.GetKey(KeyCode.Space)){
+            if (Input.GetKey(jumpk)){
                 if(!isJumping) time = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
                     isJumping = true;
                     fire.SetActive(true);
@@ -100,7 +109,7 @@ public class Movement : MonoBehaviour, Savable
             }
         }
         
-        if (Input.GetKey(KeyCode.D) && !disableRight){
+        if (Input.GetKey(rightk) && !disableRight){
         
             isRight = true;
             isDown = false;
@@ -109,9 +118,9 @@ public class Movement : MonoBehaviour, Savable
                 v.x = walkVelocity;   
                 rb.linearVelocity = v;
             }
-            if(Input.GetKey(KeyCode.S)){
+            if(Input.GetKey(downk)){
                 if(!isOnGround){
-                 if(Input.GetMouseButtonDown(0) && HitUnlocked){
+                 if(Input.GetKeyDown(hitk) && HitUnlocked){
                      if(!isHitting){
                         isHitting = true;
                         down.SetActive(true);
@@ -120,7 +129,7 @@ public class Movement : MonoBehaviour, Savable
                     }
                 }
             }
-        } else if(Input.GetMouseButtonDown(0) && HitUnlocked){
+        } else if(Input.GetKeyDown(hitk) && HitUnlocked){
                 if(!isHitting){
                     isHitting = true;
                     right.SetActive(true);
@@ -128,7 +137,7 @@ public class Movement : MonoBehaviour, Savable
                     wasHit = true;
                 }
             }
-        } else if (Input.GetKey(KeyCode.A) && !disableLeft){
+        } else if (Input.GetKey(leftk) && !disableLeft){
         
             isRight = false;
             var v = rb.linearVelocity;
@@ -136,9 +145,9 @@ public class Movement : MonoBehaviour, Savable
                 v.x = -walkVelocity;   
                 rb.linearVelocity = v;
             }
-            if(Input.GetKey(KeyCode.S)){
+            if(Input.GetKey(downk)){
             if(!isOnGround){
-                if(Input.GetMouseButtonDown(0) && HitUnlocked){
+                if(Input.GetKeyDown(hitk) && HitUnlocked){
                     if(!isHitting){
                         isHitting = true;
                         down.SetActive(true);
@@ -147,7 +156,7 @@ public class Movement : MonoBehaviour, Savable
                     }
                 }
             }
-        } else if(Input.GetMouseButtonDown(0) && HitUnlocked){
+        } else if(Input.GetKeyDown(hitk) && HitUnlocked){
                 if(!isHitting){
                     left.SetActive(true);
                     isHitting = true;
@@ -155,7 +164,7 @@ public class Movement : MonoBehaviour, Savable
                     wasHit = true;
                 }
             }
-        } else if(Input.GetMouseButtonDown(0) && !Input.GetKey(KeyCode.S) && HitUnlocked){
+        } else if(Input.GetKeyDown(hitk) && !Input.GetKey(downk) && HitUnlocked){
             if(!isHitting){
                 isHitting = true;
                 isDown = false;
@@ -171,9 +180,9 @@ public class Movement : MonoBehaviour, Savable
                 rb.linearVelocity = v;
             
         } 
-        if(Input.GetKey(KeyCode.S)){
+        if(Input.GetKey(downk)){
             if(!isOnGround){
-                if(Input.GetMouseButtonDown(0) && HitUnlocked){
+                if(Input.GetKeyDown(hitk) && HitUnlocked){
                     if(!isHitting){
                         isHitting = true;
                         isDown = true;
@@ -194,7 +203,7 @@ public class Movement : MonoBehaviour, Savable
         if(!isJumping){
             fire.SetActive(false);
         }
-        if(Input.GetMouseButtonDown(1)){
+        if(Input.GetKeyDown(dashk)){
             if(dashesLeft>0 && !isOnGround && DashUnlocked){
                 dashesLeft--;
                 DashRegistered = true;
@@ -291,6 +300,15 @@ public class Movement : MonoBehaviour, Savable
         } else {
             return "0";
         }
+    }
+    public void refreshKeyBinds()
+    {
+        downk = (KeyCode)Enum.Parse(typeof(KeyCode), sv.getKeyBind("DOWNKEY"));
+        leftk = (KeyCode)Enum.Parse(typeof(KeyCode), sv.getKeyBind("LEFTKEY"));
+        rightk = (KeyCode)Enum.Parse(typeof(KeyCode), sv.getKeyBind("RIGHTKEY"));
+        jumpk = (KeyCode)Enum.Parse(typeof(KeyCode), sv.getKeyBind("JUMPKEY"));
+        dashk = (KeyCode)Enum.Parse(typeof(KeyCode), sv.getKeyBind("DASHKEY"));
+        hitk = (KeyCode)Enum.Parse(typeof(KeyCode), sv.getKeyBind("HITKEY"));
     }
 
 }
