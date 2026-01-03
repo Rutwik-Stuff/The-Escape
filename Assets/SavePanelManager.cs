@@ -4,7 +4,6 @@ using System.Linq;
 
 public class SavePanelManager : MonoBehaviour
 {
-    public TMP_Text levelTime;
     public Transform add;
     public Transform play;
     public Transform edit;
@@ -28,8 +27,6 @@ public class SavePanelManager : MonoBehaviour
 
 
     void Awake(){
-        levelTime = GetComponentsInChildren<TMP_Text>(true)
-            .FirstOrDefault(t => t.name == "time0");
         play = GetComponentsInChildren<Transform>(true)
             .FirstOrDefault(t => t.name == "play");
         edit = GetComponentsInChildren<Transform>(true)
@@ -48,14 +45,12 @@ public class SavePanelManager : MonoBehaviour
         snm = FindObjectOfType<saveNameManager>(includeInactive: true);
     }
     void showDetails(){
-        levelTime.gameObject.SetActive(true);
         levelName.gameObject.SetActive(true);
         add.gameObject.SetActive(false);
         play.gameObject.SetActive(true);
         edit.gameObject.SetActive(true);
         delete.gameObject.SetActive(true);
         nameBackground.gameObject.SetActive(true);
-        levelTime.text = sv.getlvlTime(id);
         levelName.text = sv.loadSaveName(id);
     }
     public void createSave(){
@@ -73,7 +68,6 @@ public class SavePanelManager : MonoBehaviour
         hideDetails();
     }
     void hideDetails(){
-        levelTime.gameObject.SetActive(false);
         levelName.gameObject.SetActive(false);
         add.gameObject.SetActive(true);
         play.gameObject.SetActive(false);

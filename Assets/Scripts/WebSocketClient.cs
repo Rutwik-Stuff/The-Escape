@@ -148,7 +148,7 @@ public void reAssignFields(){
                         sv.changeUID(parts[1], parts[2]);
                     else
                     {
-                        f.showMessage(parts[1]);
+                        f.showMessage(parts[0].Substring(2));
                     }
                     break;
 
